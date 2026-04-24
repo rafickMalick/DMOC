@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cahier des Charges – Digital Market Option Center</title>
+<style>
+  :root {
+    --primary: #3f047b;
+    --secondary: #d304f4;
+    --light-primary: #f3e8ff;
+    --light-secondary: #fde8ff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 13pt;
+    color: var(--text);
+    background: #fff;
+    line-height: 1.7;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    background: linear-gradient(135deg, var(--primary) 0%, #6a05c8 50%, var(--secondary) 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover .logo-area { margin-bottom: 40px; }
+  .cover .logo-icon {
+    width: 90px; height: 90px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px; margin: 0 auto 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  .cover h1 { font-size: 38pt; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+  .cover .subtitle { font-size: 14pt; opacity: 0.85; margin-bottom: 40px; }
+  .cover .doc-type {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 10px 28px; border-radius: 30px;
+    font-size: 12pt; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 60px;
+  }
+  .cover .meta-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; max-width: 500px; width: 100%;
+  }
+  .cover .meta-item {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px; padding: 16px;
+  }
+  .cover .meta-item .label { font-size: 9pt; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  .cover .meta-item .value { font-size: 12pt; font-weight: 600; margin-top: 4px; }
+  .cover .color-chips { display: flex; gap: 12px; margin-top: 40px; }
+  .cover .chip {
+    padding: 6px 16px; border-radius: 20px; font-size: 10pt;
+    font-weight: 600; border: 2px solid rgba(255,255,255,0.4);
+  }
+
+  /* MAIN CONTENT */
+  .main { max-width: 900px; margin: 0 auto; padding: 60px 50px; }
+
+  /* TOC */
+  .toc { background: var(--light-primary); border-left: 5px solid var(--primary); border-radius: 8px; padding: 30px 36px; margin-bottom: 50px; }
+  .toc h2 { color: var(--primary); font-size: 15pt; margin-bottom: 18px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 6px 0; font-size: 11pt; }
+  .toc a { color: var(--primary); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .toc .sub { padding-left: 18px; margin-top: 4px; list-style-type: disc; }
+  .toc .sub li { font-size: 10.5pt; color: var(--muted); }
+
+  /* SECTIONS */
+  section { margin-bottom: 50px; page-break-inside: avoid; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary);
+  }
+  .section-num {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white; width: 38px; height: 38px;
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14pt; flex-shrink: 0;
+  }
+  .section-header h2 { color: var(--primary); font-size: 17pt; font-weight: 700; }
+
+  h3 { color: var(--secondary); font-size: 13pt; font-weight: 700; margin: 22px 0 10px; }
+  h4 { color: var(--primary); font-size: 11.5pt; font-weight: 600; margin: 16px 0 8px; }
+
+  p { margin-bottom: 10px; }
+
+  ul, ol { padding-left: 22px; margin-bottom: 12px; }
+  li { margin: 5px 0; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .card {
+    background: var(--light-primary); border: 1px solid #ddd6fe;
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .card h4 { color: var(--primary); margin-top: 0; margin-bottom: 8px; font-size: 11pt; }
+  .card ul { margin: 0; padding-left: 18px; }
+  .card li { font-size: 10.5pt; }
+
+  .card.secondary { background: var(--light-secondary); border-color: #f0abfc; }
+  .card.secondary h4 { color: #7e22ce; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 10.5pt; }
+  th {
+    background: linear-gradient(135deg, var(--primary), #6a05c8);
+    color: white; padding: 10px 14px; text-align: left; font-weight: 600;
+  }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) { background: #fafafa; }
+  tr:hover { background: var(--light-primary); }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-radius: 10px; padding: 18px 22px; margin: 18px 0;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .callout.info { background: var(--light-primary); border-left: 4px solid var(--primary); }
+  .callout.warn { background: #fff7ed; border-left: 4px solid #f59e0b; }
+  .callout.success { background: #f0fdf4; border-left: 4px solid #22c55e; }
+  .callout.danger { background: #fef2f2; border-left: 4px solid #ef4444; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .callout-content { flex: 1; }
+  .callout-content strong { display: block; margin-bottom: 4px; font-size: 11pt; }
+  .callout-content p { margin: 0; font-size: 10.5pt; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 9pt; font-weight: 600; margin: 2px;
+  }
+  .badge.purple { background: #ede9fe; color: var(--primary); }
+  .badge.pink { background: #fce7f3; color: #9d174d; }
+  .badge.green { background: #dcfce7; color: #166534; }
+  .badge.blue { background: #dbeafe; color: #1e40af; }
+  .badge.orange { background: #ffedd5; color: #9a3412; }
+
+  /* TIMELINE (Planning) */
+  .timeline { margin: 20px 0; }
+  .week-block {
+    border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin-bottom: 16px;
+  }
+  .week-header {
+    background: linear-gradient(135deg, var(--primary), #6a05c8);
+    color: white; padding: 12px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .week-header .week-title { font-weight: 700; font-size: 12pt; }
+  .week-header .week-theme { font-size: 10pt; opacity: 0.85; }
+  .week-body { padding: 16px 20px; }
+  .week-body table { margin: 0; }
+
+  /* BUDGET */
+  .budget-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 14px; padding: 24px 28px; color: white; margin: 16px 0;
+  }
+  .budget-card h3 { color: white; margin-top: 0; }
+  .budget-total {
+    font-size: 28pt; font-weight: 800;
+    margin: 12px 0; letter-spacing: -1px;
+  }
+  .budget-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .budget-item {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px; padding: 14px; text-align: center;
+  }
+  .budget-item .b-label { font-size: 9pt; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+  .budget-item .b-value { font-size: 15pt; font-weight: 700; margin-top: 4px; }
+
+  /* STACK */
+  .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+  .stack-item {
+    background: white; border: 2px solid #ede9fe;
+    border-radius: 10px; padding: 16px; text-align: center;
+    transition: border-color 0.2s;
+  }
+  .stack-item:hover { border-color: var(--secondary); }
+  .stack-item .s-icon { font-size: 28px; margin-bottom: 8px; }
+  .stack-item .s-name { font-weight: 700; font-size: 10.5pt; color: var(--primary); }
+  .stack-item .s-role { font-size: 9pt; color: var(--muted); margin-top: 3px; }
+
+  /* FOOTER */
+  .doc-footer {
+    background: var(--primary); color: white;
+    padding: 30px 50px; text-align: center; font-size: 10pt;
+    margin-top: 60px;
+  }
+  .doc-footer strong { color: var(--secondary); }
+
+  /* DIVIDER */
+  .divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), transparent);
+    margin: 40px 0; border-radius: 2px;
+  }
+
+  @media print {
+    .cover { min-height: auto; padding: 40px; }
+    .main { padding: 30px; }
+    section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER PAGE ===== -->
+<div class="cover">
+  <div class="logo-area">
+    <div class="logo-icon">🛒</div>
+  </div>
+  <h1>Digital Market<br>Option Center</h1>
+  <p class="subtitle">Plateforme E-Commerce Internationale &amp; Multi-Devises</p>
+  <div class="doc-type">📄 Cahier des Charges Technique</div>
+  <div class="meta-grid">
+    <div class="meta-item">
+      <div class="label">Version</div>
+      <div class="value">v1.0</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Date</div>
+      <div class="value">Avril 2025</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Équipe</div>
+      <div class="value">2 Développeurs</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Durée</div>
+      <div class="value">4 Semaines</div>
+    </div>
+  </div>
+  <div class="color-chips">
+    <div class="chip" style="background:#3f047b;">■ #3f047b Violet Principal</div>
+    <div class="chip" style="background:#d304f4;">■ #d304f4 Fuchsia Accent</div>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h2>📋 Table des Matières</h2>
+    <ol>
+      <li><a href="#s1">Présentation du Projet</a></li>
+      <li><a href="#s2">Analyse Concurrentielle</a></li>
+      <li><a href="#s3">Fonctionnalités Frontend</a></li>
+      <li><a href="#s4">Fonctionnalités Backend</a></li>
+      <li><a href="#s5">Système de Paiement</a></li>
+      <li><a href="#s6">Système de Livraison &amp; Suivi SMS</a></li>
+      <li><a href="#s7">Adaptabilité Internationale (i18n)</a></li>
+      <li><a href="#s8">Bot Telegram</a></li>
+      <li><a href="#s9">Export Excel</a></li>
+      <li><a href="#s10">Sécurité &amp; Conformité</a></li>
+      <li><a href="#s11">Stack Technique</a></li>
+      <li><a href="#s12">Planning 4 Semaines</a></li>
+      <li><a href="#s13">Budget &amp; Outils</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: PRÉSENTATION ===== -->
+  <section id="s1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Présentation du Projet</h2>
+    </div>
+
+    <p><strong>Digital Market Option Center (DMOC)</strong> est une plateforme e-commerce accessible en ligne, conçue pour permettre la vente de produits digitaux et physiques à une clientèle locale et internationale. Le site adopte une approche <strong>Mobile First</strong>, garantissant une expérience optimale sur smartphones avant tout, puis sur tablettes et desktops.</p>
+
+    <h3>🎯 Objectifs Principaux</h3>
+    <ul>
+      <li>Offrir une interface moderne, rapide et fluide sur tous les appareils</li>
+      <li>Permettre des transactions multi-devises avec tarification en Franc CFA</li>
+      <li>Automatiser la communication client via SMS et bot Telegram</li>
+      <li>Fournir un back-office complet aux administrateurs et vendeurs</li>
+      <li>S'adapter dynamiquement à la langue, devise et contexte géographique de l'utilisateur</li>
+    </ul>
+
+    <div class="callout info">
+      <div class="callout-icon">🎨</div>
+      <div class="callout-content">
+        <strong>Identité Visuelle</strong>
+        <p>Palette principale : Violet profond <code>#3f047b</code> + Fuchsia énergique <code>#d304f4</code>. Design premium, moderne, adapté au marché digital africain et international.</p>
+      </div>
+    </div>
+
+    <h3>👤 Cibles Utilisateurs</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>👥 Clients Finaux</h4>
+        <ul>
+          <li>Particuliers en Afrique de l'Ouest</li>
+          <li>Acheteurs internationaux</li>
+          <li>Utilisateurs mobile-first</li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>🏪 Vendeurs / Admins</h4>
+        <ul>
+          <li>Gestionnaires de boutique</li>
+          <li>Administrateurs système</li>
+          <li>Livreurs terrain</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 2: CONCURRENTS ===== -->
+  <section id="s2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Analyse Concurrentielle</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Concurrent</th>
+          <th>Points Forts</th>
+          <th>Points Faibles</th>
+          <th>Notre Avantage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Jumia</strong></td>
+          <td>Notoriété, large catalogue</td>
+          <td>UX lente, peu personnalisable</td>
+          <td>Interface plus rapide, mobile-first native</td>
+        </tr>
+        <tr>
+          <td><strong>Glovo / Yango</strong></td>
+          <td>Livraison rapide</td>
+          <td>Limité à la restauration</td>
+          <td>Multi-catégories + suivi SMS intégré</td>
+        </tr>
+        <tr>
+          <td><strong>Shopify stores locaux</strong></td>
+          <td>Design soigné</td>
+          <td>Coûts élevés, pas adapté CFA</td>
+          <td>100% CFA + multi-devises natif</td>
+        </tr>
+        <tr>
+          <td><strong>WooCommerce</strong></td>
+          <td>Flexible, open source</td>
+          <td>Complexe, lourd à maintenir</td>
+          <td>Laravel sur-mesure, performance optimale</td>
+        </tr>
+        <tr>
+          <td><strong>AliExpress</strong></td>
+          <td>Prix bas, large choix</td>
+          <td>Délais longs, pas localisé</td>
+          <td>Livraison locale rapide + bot Telegram</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout success">
+      <div class="callout-icon">✅</div>
+      <div class="callout-content">
+        <strong>Positionnement Différenciant</strong>
+        <p>DMOC se distingue par sa combinaison unique : tarification CFA native, suivi de colis par SMS, bot Telegram intégré, adaptabilité internationale et design mobile-first haut de gamme.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 3: FRONTEND ===== -->
+  <section id="s3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Fonctionnalités Frontend</h2>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">📱</div>
+      <div class="callout-content">
+        <strong>Approche Mobile First</strong>
+        <p>Tous les composants sont conçus d'abord pour écrans 375px (smartphones), puis étendus pour tablettes (768px) et desktops (1280px+). Navigation tactile, images optimisées, temps de chargement &lt; 2s sur 3G.</p>
+      </div>
+    </div>
+
+    <h3>🏠 Pages Principales</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Page d'Accueil</h4>
+        <ul>
+          <li>Hero banner avec carousel d'offres</li>
+          <li>Catégories mises en avant</li>
+          <li>Produits tendances / nouveautés</li>
+          <li>Barre de recherche intelligente (live)</li>
+          <li>Offres flash avec compte à rebours</li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>Catalogue &amp; Produits</h4>
+        <ul>
+          <li>Filtres avancés (prix, catégorie, note)</li>
+          <li>Vue grille / liste switchable</li>
+          <li>Galerie images zoomable</li>
+          <li>Avis clients avec étoiles</li>
+          <li>Produits similaires / recommandés</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Panier &amp; Checkout</h4>
+        <ul>
+          <li>Panier persistant (local + session)</li>
+          <li>Calcul automatique des frais de port</li>
+          <li>Application de codes promo</li>
+          <li>Récapitulatif commande clair</li>
+          <li>Checkout en 3 étapes max</li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>Espace Utilisateur</h4>
+        <ul>
+          <li>Tableau de bord commandes</li>
+          <li>Suivi de livraison en temps réel</li>
+          <li>Historique achats &amp; factures PDF</li>
+          <li>Wishlist / favoris</li>
+          <li>Gestion profil &amp; adresses</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>🎨 Éléments UI/UX</h3>
+    <ul>
+      <li>Skeleton loaders pour un affichage progressif</li>
+      <li>Toast notifications pour les actions utilisateur</li>
+      <li>Navigation bottom bar sur mobile (pattern app native)</li>
+      <li>Mode sombre / clair (toggle)</li>
+      <li>Animations CSS fluides avec Framer Motion ou Alpine.js</li>
+      <li>Images lazy-loaded, WebP, responsive srcset</li>
+      <li>PWA-ready (Progressive Web App) – installable sur mobile</li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 4: BACKEND ===== -->
+  <section id="s4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Fonctionnalités Backend</h2>
+    </div>
+
+    <h3>🛒 Gestion Catalogue</h3>
+    <ul>
+      <li>CRUD complet des produits (physiques, digitaux, variants)</li>
+      <li>Gestion des catégories et sous-catégories hiérarchiques</li>
+      <li>Gestion des stocks avec alertes de rupture</li>
+      <li>Import/export produits en masse (CSV, Excel)</li>
+      <li>Gestion des images avec redimensionnement automatique (Intervention Image)</li>
+    </ul>
+
+    <h3>📦 Gestion des Commandes</h3>
+    <ul>
+      <li>Pipeline de statuts : <span class="badge purple">En attente</span> → <span class="badge blue">Confirmée</span> → <span class="badge orange">En préparation</span> → <span class="badge orange">En livraison</span> → <span class="badge green">Livrée</span></li>
+      <li>Génération automatique de factures PDF (Laravel DomPDF)</li>
+      <li>Système de retours et remboursements  (à   voir)</li>
+      <li>Notes internes par commande pour l'équipe</li>
+    </ul>
+
+    <h3>👥 Gestion des Utilisateurs &amp; Rôles</h3>
+    <table>
+      <thead>
+        <tr><th>Rôle</th><th>Permissions Principales</th></tr>
+      </thead>
+      <tbody>
+        <!-- <tr><td><strong>Super Admin</strong></td><td>Accès total, configuration système, rapports</td></tr> -->
+        <tr><td><strong>Admin</strong></td><td>Gestion commandes, produits, utilisateurs</td></tr>
+        <!-- <tr><td><strong>Vendeur</strong></td><td>Gestion de son catalogue et ses commandes</td></tr> -->
+        <tr><td><strong>Livreur</strong></td><td>Mise à jour statut livraison, confirmation réception</td></tr>
+        <tr><td><strong>Client</strong></td><td>Navigation, achat, suivi commande</td></tr>
+      </tbody>
+    </table>
+
+    <h3>📊 Tableau de Bord Admin</h3>
+    <ul>
+      <li>KPIs en temps réel : CA, commandes, panier moyen, taux conversion</li>
+      <li>Graphiques de ventes par période (Chart.js)</li>
+      <li>Carte de chaleur des ventes par région</li>
+      <li>Alertes automatiques (stock bas, paiement en attente)</li>
+    </ul>
+
+    <h3>🔧 API REST</h3>
+    <ul>
+      <li>API REST documentée (Laravel Sanctum + Swagger/Scribe)</li>
+      <li>Webhooks pour les intégrations tierces (paiement, SMS, Telegram)</li>
+      <li>Rate limiting et throttling par IP et par utilisateur</li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 5: PAIEMENT ===== -->
+  <section id="s5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Système de Paiement</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h4>💳 Mobile Money (Prioritaire)</h4>
+        <ul>
+          <li>Orange Money (API CinetPay ou FedaPay)</li>
+          <li>MTN Mobile Money</li>
+          <li>Wave (Sénégal / Côte d'Ivoire)</li>
+          <li>Moov Money</li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>🌍 Paiements Internationaux</h4>
+        <ul>
+          <li>Stripe (cartes Visa/Mastercard)</li>
+          <li>PayPal</li>
+          <li>CinetPay (Afrique multi-pays)</li>
+          <li>Flutterwave (Afrique subsaharienne)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>💵 Paiement à la Livraison</h4>
+        <ul>
+          <li>Option cash on delivery</li>
+          <li>Confirmation par livreur dans l'app</li>
+          <li>Reçu électronique automatique</li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>🔐 Sécurité Paiements</h4>
+        <ul>
+          <li>HTTPS obligatoire (TLS 1.3)</li>
+          <li>Tokenisation (aucune carte stockée)</li>
+          <li>3D Secure activé</li>
+          <li>Logs de transactions chiffrés</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>💱 Gestion Multi-Devises (à voir)</h3>
+    <p>Le système affiche les prix en Franc CFA (XOF) par défaut, avec conversion automatique selon la géolocalisation de l'utilisateur :</p>
+    <table>
+      <thead>
+        <tr><th>Devise</th><th>Pays / Région</th><th>Taux (API Fixer.io)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>XOF – Franc CFA</td><td>Bénin, Sénégal, CI, Mali…</td><td>Référence</td></tr>
+        <tr><td>EUR – Euro</td><td>Europe</td><td>Dynamique</td></tr>
+        <tr><td>USD – Dollar</td><td>USA / International</td><td>Dynamique</td></tr>
+        <tr><td>GHS – Cedi</td><td>Ghana</td><td>Dynamique</td></tr>
+        <tr><td>NGN – Naira</td><td>Nigéria</td><td>Dynamique</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-content">
+        <strong>Taux de Change</strong>
+        <p>Les taux sont mis à jour toutes les 6 heures via l'API Fixer.io. Les prix affichés sont informatifs ; la facturation finale s'effectue toujours dans la devise de base (XOF) pour les transactions locales.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 6: LIVRAISON ===== -->
+  <section id="s6">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Système de Livraison &amp; Suivi SMS</h2>
+    </div>
+
+    <h3>🚚 Architecture du Système de Livraison</h3>
+    <p>Le système de livraison est entièrement paramétrable depuis le back-office. Il comprend les entités suivantes :</p>
+
+    <table>
+      <thead>
+        <tr><th>Entité</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Zones de livraison</strong></td><td>Définition géographique (ville, quartier, région, pays)</td></tr>
+        <tr><td><strong>Transporteurs</strong></td><td>Partenaires de livraison configurables (nom, logo, délai)</td></tr>
+        <tr><td><strong>Méthodes de livraison</strong></td><td>Standard, Express, Point relais, Enlèvement en magasin</td></tr>
+        <tr><td><strong>Règles de tarification</strong></td><td>Par poids, distance, zone, montant minimum commande</td></tr>
+        <tr><td><strong>Livreurs</strong></td><td>Personnel terrain avec compte dédié dans l'app</td></tr>
+        <tr><td><strong>Créneaux horaires</strong></td><td>Gestion des plages de livraison par zone</td></tr>
+      </tbody>
+    </table>
+
+    <h3>💰 Calcul des Tarifs en Franc CFA</h3>
+    <p>La formule de calcul des frais de livraison est la suivante :</p>
+    <div class="callout info">
+      <div class="callout-icon">🧮</div>
+      <div class="callout-content">
+        <strong>Formule de Calcul</strong>
+        <p><strong>Frais = Tarif de base (zone) + (Poids en kg × Tarif/kg) + Supplément express</strong></p>
+        <p>Exemple : Cotonou centre = 500 XOF de base + 200 XOF/kg. Commande 2 kg = 900 XOF. Express = +500 XOF.</p>
+        <p>Toutes les variables (tarifs de base, tarifs/kg, suppléments) sont configurables dans le panel admin.</p>
+      </div>
+    </div>
+
+    <h3>📱 Suivi de Colis par SMS</h3>
+    <p>À chaque étape clé du cycle de vie d'une commande, le client reçoit automatiquement un SMS personnalisé :</p>
+
+    <table>
+      <thead>
+        <tr><th>Événement</th><th>Message SMS Envoyé</th><th>Déclencheur</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge blue">Commande confirmée</span></td>
+          <td>"Bonjour [Prénom], votre commande #[ID] est confirmée ! Total : [Montant] XOF. Merci pour votre confiance – DMOC"</td>
+          <td>Validation du paiement</td>
+        </tr>
+        <tr>
+          <td><span class="badge orange">Livraison lancée</span></td>
+          <td>"[Prénom], votre colis est en route ! Livreur : [Nom]. Trajet estimé : [X] min. Suivi : [lien]"</td>
+          <td>Livreur clique "Départ"</td>
+        </tr>
+        <tr>
+          <td><span class="badge orange">Livraison proche</span></td>
+          <td>"[Prénom], votre livreur arrive dans ~15 min. Restez disponible ! – DMOC"</td>
+          <td>Géofence automatique</td>
+        </tr>
+        <tr>
+          <td><span class="badge green">Livraison effectuée</span></td>
+          <td>"Commande #[ID] livrée ! Donnez votre avis : [lien]. Merci de nous faire confiance – DMOC"</td>
+          <td>Livreur confirme réception</td>
+        </tr>
+        <tr>
+          <td><span class="badge pink">Tentative échouée</span></td>
+          <td>"Livraison impossible aujourd'hui. Contactez-nous : [tel] ou reprogrammez : [lien]"</td>
+          <td>Livreur signale échec</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Fournisseurs SMS Intégrés</h4>
+    <ul>
+      <li><strong>Afrika's Talking</strong> — Couverture Afrique subsaharienne, tarif ~2-5 XOF/SMS</li>
+      <li><strong>Twilio</strong> — Couverture mondiale, fallback international</li>
+      <li><strong>Orange SMS API</strong> — Opérateur local Bénin/Afrique de l'Ouest</li>
+    </ul>
+
+    <div class="callout success">
+      <div class="callout-icon">📍</div>
+      <div class="callout-content">
+        <strong>Suivi en Temps Réel</strong>
+        <p>Un lien de suivi unique est généré par commande. Le client peut voir la position du livreur sur une carte (Google Maps API) sans créer de compte.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 7: INTERNATIONALISATION ===== -->
+  <section id="s7">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Adaptabilité Internationale (i18n)</h2>
+    </div>
+
+    <p>DMOC est conçu pour s'adapter automatiquement au contexte géographique de chaque utilisateur. La détection se fait via l'IP de l'utilisateur (API MaxMind GeoIP ou ipapi.co).</p>
+
+    <h3>🌐 Variables Dynamiques par Pays</h3>
+    <table>
+      <thead>
+        <tr><th>Variable</th><th>Description</th><th>Exemple</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Langue</strong></td>
+          <td>Interface dans la langue locale</td>
+          <td>FR (Bénin), EN (Ghana/Nigeria), PT (Guinée)</td>
+        </tr>
+        <tr>
+          <td><strong>Devise</strong></td>
+          <td>Affichage des prix dans la monnaie locale</td>
+          <td>XOF, EUR, USD, GHS, NGN</td>
+        </tr>
+        <tr>
+          <td><strong>Format de date</strong></td>
+          <td>Conventions de date locales</td>
+          <td>DD/MM/YYYY (FR), MM/DD/YYYY (US)</td>
+        </tr>
+        <tr>
+          <td><strong>Délais de livraison</strong></td>
+          <td>Estimation selon la distance réelle</td>
+          <td>1-2j (Cotonou), 3-7j (international)</td>
+        </tr>
+        <tr>
+          <td><strong>Méthodes de paiement</strong></td>
+          <td>Options disponibles selon le pays</td>
+          <td>Orange Money (BJ), MTN MoMo (GH)</td>
+        </tr>
+        <tr>
+          <td><strong>Format téléphone</strong></td>
+          <td>Indicatif et validation numéro</td>
+          <td>+229 (BJ), +233 (GH), +221 (SN)</td>
+        </tr>
+        <tr>
+          <td><strong>Taxes / TVA</strong></td>
+          <td>Taux applicables par pays</td>
+          <td>18% TVA Bénin, 20% France</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout info">
+      <div class="callout-icon">🔧</div>
+      <div class="callout-content">
+        <strong>Gestion Admin des Locales</strong>
+        <p>L'administrateur peut ajouter, modifier ou désactiver une locale depuis le panel admin. Les fichiers de traduction sont au format JSON (Laravel lang files). Le système utilise le package <strong>spatie/laravel-translatable</strong> pour les contenus traduits.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 8: BOT TELEGRAM ===== -->
+  <section id="s8">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>Bot Telegram</h2>
+    </div>
+
+    <p>Un bot Telegram officiel est intégré pour permettre aux clients de suivre leurs commandes et aux admins de recevoir des alertes en temps réel, directement depuis Telegram.</p>
+
+    <h3>🤖 Fonctionnalités Client (Bot Public)</h3>
+    <ul>
+      <li><code>/start</code> — Accueil et liaison du compte client avec Telegram ID</li>
+      <li><code>/commandes</code> — Liste des dernières commandes avec statuts</li>
+      <li><code>/suivi [ID]</code> — Statut détaillé et lien de tracking d'une commande</li>
+      <li><code>/catalogue</code> — Accès rapide aux catégories et produits populaires</li>
+      <li><code>/promo</code> — Offres et promotions en cours</li>
+      <li><code>/support</code> — Ouverture d'un ticket support ou transfert à un agent</li>
+    </ul>
+
+    <h3>🔔 Notifications Admin (Canal Privé)</h3>
+    <ul>
+      <li>Alerte à chaque nouvelle commande (avec résumé et montant)</li>
+      <li>Alerte stock bas (quantité &lt; seuil configuré)</li>
+      <li>Alerte paiement en attente depuis plus de X heures</li>
+      <li>Rapport journalier automatique (CA, nb commandes, best-sellers)</li>
+      <li>Alerte retour / réclamation client</li>
+    </ul>
+
+    <h3>⚙️ Implémentation Technique</h3>
+    <ul>
+      <li>Bibliothèque : <strong>irazasyed/telegram-bot-sdk</strong> (Laravel)</li>
+      <li>Webhooks sécurisés (token Telegram + vérification IP)</li>
+      <li>Commandes enregistrées via <code>php artisan telegram:register-commands</code></li>
+      <li>Réponses inline keyboard pour navigation intuitive dans Telegram</li>
+    </ul>
+
+    <div class="callout success">
+      <div class="callout-icon">🚀</div>
+      <div class="callout-content">
+        <strong>Bot Canal de Notification Marketing</strong>
+        <p>Un canal Telegram séparé peut être utilisé pour diffuser des offres promotionnelles à tous les abonnés, fonctionnant comme un outil marketing direct à coût zéro.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 9: EXPORT EXCEL ===== -->
+  <section id="s9">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <h2>Export de Données en Excel</h2>
+    </div>
+
+    <p>Le back-office dispose d'un système d'export complet vers Excel (.xlsx) pour faciliter les analyses et le reporting offline. L'outil utilisé est <strong>maatwebsite/excel</strong> (Laravel Excel).</p>
+
+    <h3>📊 Exports Disponibles</h3>
+    <table>
+      <thead>
+        <tr><th>Module</th><th>Données Exportées</th><th>Filtres Disponibles</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Commandes</strong></td>
+          <td>ID, date, client, produits, montant, statut, livreur</td>
+          <td>Période, statut, zone, livreur</td>
+        </tr>
+        <tr>
+          <td><strong>Clients</strong></td>
+          <td>Nom, email, téléphone, adresse, nb commandes, CA total</td>
+          <td>Pays, date inscription, activité</td>
+        </tr>
+        <tr>
+          <td><strong>Produits</strong></td>
+          <td>Référence, nom, catégorie, stock, prix, ventes</td>
+          <td>Catégorie, stock, vendeur</td>
+        </tr>
+        <tr>
+          <td><strong>Paiements</strong></td>
+          <td>Transaction ID, méthode, montant XOF, statut, date</td>
+          <td>Méthode, période, statut</td>
+        </tr>
+        <tr>
+          <td><strong>Livraisons</strong></td>
+          <td>Zone, livreur, nb colis, délai moyen, taux réussite</td>
+          <td>Zone, livreur, période</td>
+        </tr>
+        <tr>
+          <td><strong>Rapport CA</strong></td>
+          <td>Synthèse par jour/semaine/mois, croissance, marge</td>
+          <td>Granularité, devise</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>✨ Fonctionnalités de l'Export</h3>
+    <ul>
+      <li>Export planifié automatique (email hebdomadaire aux admins)</li>
+      <li>Export à la demande avec filtres personnalisés</li>
+      <li>Mise en forme Excel : en-têtes colorés (#3f047b), tableaux formatés, totaux automatiques</li>
+      <li>Feuilles multiples dans un seul fichier (une par catégorie de données)</li>
+      <li>Génération asynchrone pour les gros volumes (Laravel Queue)</li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 10: SÉCURITÉ ===== -->
+  <section id="s10">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <h2>Sécurité &amp; Conformité</h2>
+    </div>
+
+    <div class="callout danger">
+      <div class="callout-icon">🔒</div>
+      <div class="callout-content">
+        <strong>Priorité Haute</strong>
+        <p>La sécurité est intégrée dès la conception (Security by Design). Aucun raccourci technique ne sera pris sur les aspects sécurité, même sous contrainte de délai.</p>
+      </div>
+    </div>
+
+    <h3>🛡️ Sécurité Applicative</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Authentification</h4>
+        <ul>
+          <li>Laravel Sanctum (tokens API)</li>
+          <li>2FA optionnel (TOTP via Google Authenticator)</li>
+          <li>Expiration automatique sessions</li>
+          <li>Détection connexions suspectes</li>
+          <li>Blacklisting tokens compromis</li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>Protection des Données</h4>
+        <ul>
+          <li>Chiffrement AES-256 des données sensibles</li>
+          <li>Hachage bcrypt des mots de passe</li>
+          <li>HTTPS / TLS 1.3 obligatoire</li>
+          <li>Aucune carte bancaire stockée (tokenisation)</li>
+          <li>Masquage données PII dans les logs</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Protection Attaques Web</h4>
+        <ul>
+          <li>CSRF tokens sur tous les formulaires</li>
+          <li>Protection XSS (échappement Blade)</li>
+          <li>Prévention SQL Injection (Eloquent ORM)</li>
+          <li>Rate limiting API (60 req/min)</li>
+          <li>Validation stricte entrées utilisateur</li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>Infrastructure</h4>
+        <ul>
+          <li>Firewall applicatif (WAF Cloudflare)</li>
+          <li>Protection DDoS (Cloudflare)</li>
+          <li>Sauvegardes quotidiennes chiffrées</li>
+          <li>Serveur VPS Ubuntu 22.04 LTS</li>
+          <li>Mises à jour de sécurité automatiques</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>📋 Conformité &amp; Légal</h3>
+    <ul>
+      <li><strong>Politique de confidentialité</strong> — Page dédiée, explicite et lisible</li>
+      <li><strong>Conditions Générales de Vente (CGV)</strong> — Obligatoires avant achat</li>
+      <li><strong>Consentement cookies</strong> — Bannière conforme, opt-in/opt-out</li>
+      <li><strong>Droit à l'effacement</strong> — Possibilité pour l'utilisateur de supprimer son compte et ses données</li>
+      <li><strong>Portabilité des données</strong> — Export des données personnelles en JSON sur demande</li>
+      <li><strong>Mentions légales</strong> — Éditeur, hébergeur, coordonnées obligatoires</li>
+    </ul>
+
+    <h3>🔍 Audit &amp; Monitoring</h3>
+    <ul>
+      <li>Logs d'activité admin (qui a fait quoi, quand)</li>
+      <li>Monitoring applicatif : Laravel Telescope (dev) + Sentry (prod)</li>
+      <li>Alertes email/Telegram en cas d'erreur critique</li>
+      <li>Audit de sécurité trimestriel recommandé</li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 11: STACK TECHNIQUE ===== -->
+  <section id="s11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>Stack Technique</h2>
+    </div>
+
+    <div class="stack-grid">
+      <div class="stack-item">
+        <div class="s-icon">⚙️</div>
+        <div class="s-name">Laravel 13</div>
+        <div class="s-role">Backend Framework (PHP 8.3)</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">🎨</div>
+        <div class="s-name">Blade + Livewire</div>
+        <div class="s-role">Frontend Templating &amp; Réactivité</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">🎯</div>
+        <div class="s-name">Alpine.js</div>
+        <div class="s-role">Interactions JS légères</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">💅</div>
+        <div class="s-name">Tailwind CSS</div>
+        <div class="s-role">Framework CSS Utility-First</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">🗄️</div>
+        <div class="s-name">MySQL 8</div>
+        <div class="s-role">Base de données relationnelle</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">⚡</div>
+        <div class="s-name">Redis</div>
+        <div class="s-role">Cache &amp; Sessions &amp; Queues</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">🔒</div>
+        <div class="s-name">Laravel Sanctum</div>
+        <div class="s-role">Authentification API</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">📊</div>
+        <div class="s-name">Laravel Excel</div>
+        <div class="s-role">Export .xlsx (maatwebsite)</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">🤖</div>
+        <div class="s-name">Telegram SDK</div>
+        <div class="s-role">Bot Telegram (irazasyed)</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">📧</div>
+        <div class="s-name">Afrika's Talking</div>
+        <div class="s-role">SMS Afrique subsaharienne</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">☁️</div>
+        <div class="s-name">Cloudflare</div>
+        <div class="s-role">CDN, WAF, DDoS protection</div>
+      </div>
+      <div class="stack-item">
+        <div class="s-icon">🐳</div>
+        <div class="s-name">Docker</div>
+        <div class="s-role">Environnement dev unifié</div>
+      </div>
+    </div>
+
+    <h3>📦 Packages Laravel Clés</h3>
+    <table>
+      <thead>
+        <tr><th>Package</th><th>Usage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>spatie/laravel-permission</td><td>Gestion rôles &amp; permissions</td></tr>
+        <tr><td>spatie/laravel-translatable</td><td>Contenus multi-langues</td></tr>
+        <tr><td>spatie/laravel-media-library</td><td>Gestion médias / images</td></tr>
+        <tr><td>barryvdh/laravel-dompdf</td><td>Génération factures PDF</td></tr>
+        <tr><td>intervention/image</td><td>Traitement et redimensionnement images</td></tr>
+        <tr><td>maatwebsite/excel</td><td>Import/export Excel</td></tr>
+        <tr><td>irazasyed/telegram-bot-sdk</td><td>Bot Telegram</td></tr>
+        <tr><td>laravel/horizon</td><td>Monitoring des queues Redis</td></tr>
+        <tr><td>laravel/telescope</td><td>Débogage et inspection (dev)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 12: PLANNING ===== -->
+  <section id="s12">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <h2>Planning Détaillé sur 4 Semaines</h2>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">👨‍💻</div>
+      <div class="callout-content">
+        <strong>Organisation de l'Équipe</strong>
+        <p><strong>Dev 1 (Backend Lead)</strong> : Architecture Laravel, API, paiements, SMS, sécurité. <strong>Dev 2 (Frontend Lead)</strong> : UI/UX Blade + Livewire, Tailwind, mobile-first, bot Telegram UI.</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <!-- SEMAINE 1 -->
+      <div class="week-block">
+        <div class="week-header">
+          <span class="week-title">📅 Semaine 1</span>
+          <span class="week-theme">Fondations &amp; Architecture</span>
+        </div>
+        <div class="week-body">
+          <table>
+            <thead><tr><th>Tâche</th><th>Dev</th><th>Durée</th></tr></thead>
+            <tbody>
+              <tr><td>Setup projet Laravel + Docker + Git + CI/CD basique</td><td>Dev 1 &amp; 2</td><td>0.5j</td></tr>
+              <tr><td>Modélisation BDD (migrations, relations, seeders)</td><td>Dev 1</td><td>1j</td></tr>
+              <tr><td>Authentification complète (register, login, 2FA, roles)</td><td>Dev 1</td><td>1j</td></tr>
+              <tr><td>Design system Tailwind (couleurs, composants de base)</td><td>Dev 2</td><td>1j</td></tr>
+              <tr><td>Layout principal (header, footer, navigation mobile)</td><td>Dev 2</td><td>0.5j</td></tr>
+              <tr><td>Homepage &amp; catalogue produits (vue liste + fiche)</td><td>Dev 2</td><td>1j</td></tr>
+              <tr><td>CRUD produits + catégories (backend + UI admin)</td><td>Dev 1</td><td>1j</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SEMAINE 2 -->
+      <div class="week-block">
+        <div class="week-header">
+          <span class="week-title">📅 Semaine 2</span>
+          <span class="week-theme">E-Commerce Core &amp; Paiements</span>
+        </div>
+        <div class="week-body">
+          <table>
+            <thead><tr><th>Tâche</th><th>Dev</th><th>Durée</th></tr></thead>
+            <tbody>
+              <tr><td>Panier d'achat (ajout, suppression, mise à jour)</td><td>Dev 2</td><td>0.5j</td></tr>
+              <tr><td>Tunnel de commande (checkout 3 étapes)</td><td>Dev 2</td><td>1j</td></tr>
+              <tr><td>Intégration CinetPay (Mobile Money)</td><td>Dev 1</td><td>1j</td></tr>
+              <tr><td>Intégration Stripe + PayPal</td><td>Dev 1</td><td>1j</td></tr>
+              <tr><td>Gestion commandes backend + statuts + facture PDF</td><td>Dev 1</td><td>1j</td></tr>
+              <tr><td>Espace client (tableau de bord, historique)</td><td>Dev 2</td><td>1j</td></tr>
+              <tr><td>Gestion multi-devises (API Fixer.io + détection pays)</td><td>Dev 1</td><td>0.5j</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SEMAINE 3 -->
+      <div class="week-block">
+        <div class="week-header">
+          <span class="week-title">📅 Semaine 3</span>
+          <span class="week-theme">Livraison, SMS, Bot &amp; Internationalisation</span>
+        </div>
+        <div class="week-body">
+          <table>
+            <thead><tr><th>Tâche</th><th>Dev</th><th>Durée</th></tr></thead>
+            <tbody>
+              <tr><td>Système de livraison (zones, tarifs CFA, transporteurs)</td><td>Dev 1</td><td>1.5j</td></tr>
+              <tr><td>Intégration SMS Afrika's Talking (5 événements)</td><td>Dev 1</td><td>0.5j</td></tr>
+              <tr><td>Page suivi colis public (carte Google Maps)</td><td>Dev 2</td><td>1j</td></tr>
+              <tr><td>App livreur (interface mobile dédiée)</td><td>Dev 2</td><td>1j</td></tr>
+              <tr><td>Bot Telegram (client + notifications admin)</td><td>Dev 1</td><td>1j</td></tr>
+              <tr><td>Internationalisation (i18n) : Langue, devise, formats</td><td>Dev 1</td><td>1j</td></tr>
+              <tr><td>Export Excel (6 modules)</td><td>Dev 1</td><td>0.5j</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SEMAINE 4 -->
+      <div class="week-block">
+        <div class="week-header">
+          <span class="week-title">📅 Semaine 4</span>
+          <span class="week-theme">Sécurité, Tests &amp; Mise en Production</span>
+        </div>
+        <div class="week-body">
+          <table>
+            <thead><tr><th>Tâche</th><th>Dev</th><th>Durée</th></tr></thead>
+            <tbody>
+              <tr><td>Audit sécurité complet (CSRF, XSS, injection, auth)</td><td>Dev 1 &amp; 2</td><td>1j</td></tr>
+              <tr><td>Tests fonctionnels (Feature tests Laravel)</td><td>Dev 1</td><td>0.5j</td></tr>
+              <tr><td>Optimisation performance (cache Redis, images, requêtes)</td><td>Dev 1</td><td>0.5j</td></tr>
+              <tr><td>Tests mobile &amp; cross-browser (Chrome, Firefox, Safari)</td><td>Dev 2</td><td>0.5j</td></tr>
+              <tr><td>Configuration serveur VPS (Nginx, SSL, PHP-FPM)</td><td>Dev 1</td><td>0.5j</td></tr>
+              <tr><td>Déploiement production + DNS + Cloudflare</td><td>Dev 1</td><td>0.5j</td></tr>
+              <tr><td>Documentation technique + Manuel utilisateur</td><td>Dev 1 &amp; 2</td><td>0.5j</td></tr>
+              <tr><td>Tests de charge + corrections bugs finaux</td><td>Dev 1 &amp; 2</td><td>1j</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== SECTION 13: BUDGET ===== -->
+  <section id="s13">
+    <div class="section-header">
+      <div class="section-num">13</div>
+      <h2>Budget, Outils &amp; Ressources</h2>
+    </div>
+
+    <h3>🛠️ Outils de Développement Accéléré</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>💻 Cursor IDE — 20$/mois</h4>
+        <ul>
+          <li>IDE avec IA intégrée pour la génération de code</li>
+          <li>Autocomplétion contextuelle Laravel/PHP</li>
+          <li>Refactoring et correction automatique de bugs</li>
+          <li>Gain estimé : <strong>40-50% du temps de dev</strong></li>
+        </ul>
+      </div>
+      <div class="card secondary">
+        <h4>🤖 Claude Code — 5$/mois</h4>
+        <ul>
+          <li>Génération de migrations, modèles, controllers</li>
+          <li>Rédaction des tests unitaires automatisés</li>
+          <li>Assistance architecture et patterns Laravel</li>
+          <li>Gain estimé : <strong>20-30% du temps de dev</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <div class="callout-icon">⚡</div>
+      <div class="callout-content">
+        <strong>ROI des Outils IA</strong>
+        <p>L'utilisation combinée de Cursor (20$) et Claude Code (5$) représente 25$/mois pour 2 développeurs. Pour un projet de 4 semaines, cela revient à ~12,5$/dev. Le gain de productivité estimé (40-60% de temps économisé) justifie largement cet investissement.</p>
+      </div>
+    </div>
+
+    <h3>💰 Estimation Budget Global</h3>
+    <div class="budget-card">
+      <h3>💎 Budget Total Estimé</h3>
+      <div class="budget-total">~2 500 – 4 500 $</div>
+      <p style="opacity:0.8;font-size:10pt;">Fourchette selon tarification des développeurs (pour 4 semaines, 2 devs)</p>
+      <div class="budget-grid">
+        <div class="budget-item">
+          <div class="b-label">Outils IA</div>
+          <div class="b-value">25 $</div>
+        </div>
+        <div class="budget-item">
+          <div class="b-label">Hébergement VPS</div>
+          <div class="b-value">20-40 $/mois</div>
+        </div>
+        <div class="budget-item">
+          <div class="b-label">Nom de domaine</div>
+          <div class="b-value">~15 $/an</div>
+        </div>
+        <div class="budget-item">
+          <div class="b-label">SSL Cloudflare</div>
+          <div class="b-value">Gratuit</div>
+        </div>
+        <div class="budget-item">
+          <div class="b-label">SMS (Afrika's Talking)</div>
+          <div class="b-value">Pay as you go</div>
+        </div>
+        <div class="budget-item">
+          <div class="b-label">APIs tierces</div>
+          <div class="b-value">~20 $/mois</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>📋 Répartition du Travail par Développeur</h3>
+    <table>
+      <thead>
+        <tr><th>Domaine</th><th>Dev 1 (Backend)</th><th>Dev 2 (Frontend)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Architecture &amp; Base de Données</td><td>✅ Principal</td><td>🤝 Support</td></tr>
+        <tr><td>API REST &amp; Logique Métier</td><td>✅ Principal</td><td>—</td></tr>
+        <tr><td>UI/UX &amp; Design System</td><td>—</td><td>✅ Principal</td></tr>
+        <tr><td>Composants Livewire</td><td>🤝 Support</td><td>✅ Principal</td></tr>
+        <tr><td>Intégrations Paiement</td><td>✅ Principal</td><td>🤝 Tests</td></tr>
+        <tr><td>SMS &amp; Bot Telegram</td><td>✅ Principal</td><td>🤝 UI Chat</td></tr>
+        <tr><td>Export Excel</td><td>✅ Principal</td><td>🤝 UI</td></tr>
+        <tr><td>Sécurité &amp; Déploiement</td><td>✅ Principal</td><td>🤝 Tests</td></tr>
+        <tr><td>Mobile First &amp; PWA</td><td>🤝 Support</td><td>✅ Principal</td></tr>
+        <tr><td>i18n &amp; Localisation</td><td>✅ Backend</td><td>✅ Frontend</td></tr>
+      </tbody>
+    </table>
+
+    <h3>🔗 Services Tiers Gratuits ou Open Source</h3>
+    <ul>
+      <li><strong>Cloudflare Free</strong> — CDN, SSL, protection DDoS basique</li>
+      <li><strong>GitHub</strong> — Gestion de version et CI/CD (GitHub Actions)</li>
+      <li><strong>Mailtrap</strong> — Tests emails en développement (gratuit)</li>
+      <li><strong>Laravel Telescope</strong> — Monitoring debug (gratuit, open source)</li>
+      <li><strong>Sentry Free Tier</strong> — Monitoring erreurs en production (jusqu'à 5K events/mois)</li>
+      <li><strong>Google Maps API</strong> — Suivi colis (facturation à l'usage, ~0.005$/requête)</li>
+    </ul>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p><strong style="color:#d304f4;">Digital Market Option Center</strong> — Cahier des Charges Technique v1.0</p>
+  <p style="margin-top:8px;opacity:0.7;">Document confidentiel — Usage interne équipe de développement — Avril 2025</p>
+  <p style="margin-top:8px;opacity:0.5;font-size:9pt;">Stack : Laravel 11 · Blade/Livewire · Tailwind CSS · MySQL · Redis · Bot Telegram · SMS Afrika's Talking</p>
+</div>
+
+</body>
+</html>
