@@ -1,163 +1,141 @@
 @extends('layouts.client')
-@section('title','Paiement Securise')
+@section('title','Checkout')
 @section('content')
+<h1 class="text-3xl font-bold mb-2">Checkout</h1>
+<p class="mb-6 text-[#c4b5d6]">Complete the 3 steps to place your order.</p>
 
-<x-page-header title='Paiement Sécurisé' breadcrumb='DMOC / E-commerce / Checkout'>
-    <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <a href="{{ route('client.cart') }}" class="w-8 h-8 rounded-full bg-green-500/20 border border-green-500 flex items-center justify-center text-green-400 font-bold text-sm hover:bg-green-500 hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        </a>
-        <span class="text-[#c4b5d6] text-xs font-bold uppercase tracking-wide">Panier</span>
-        <div class="w-8 h-[2px] bg-green-500"></div>
-        <span class="w-8 h-8 rounded-full bg-[#d304f4] flex items-center justify-center text-white font-bold text-sm">2</span>
-        <span class="text-white text-xs font-bold uppercase tracking-wide">Paiement</span>
+@if(session('success'))
+    <div class="mb-4 rounded border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-emerald-300">
+        {{ session('success') }}
     </div>
-</x-page-header>
+@endif
 
-<div class='grid lg:grid-cols-[1fr_400px] gap-8'>
-  <section class="space-y-8">
-      <!-- Livraison details -->
-      <div class="bg-[#1a0035] border border-[#5a2080]/50 rounded-2xl overflow-hidden shadow-lg">
-          <div class="px-6 py-4 border-b border-[#5a2080]/30 bg-[#120024] flex items-center gap-3">
-              <span class="w-8 h-8 rounded-full bg-[#3f047b] text-white flex items-center justify-center font-bold font-mono">1</span>
-              <h2 class="text-xl font-bold">Informations de livraison</h2>
-          </div>
-          <div class="p-6">
-              <div class="grid md:grid-cols-2 gap-6">
-                  <div class="space-y-2">
-                      <label class="text-sm text-[#c4b5d6] font-medium">Prénom</label>
-                      <input type="text" class="w-full bg-[#120024] border border-[#5a2080]/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d304f4] focus:ring-1 focus:ring-[#d304f4]" placeholder="Votre prénom">
-                  </div>
-                  <div class="space-y-2">
-                      <label class="text-sm text-[#c4b5d6] font-medium">Nom</label>
-                      <input type="text" class="w-full bg-[#120024] border border-[#5a2080]/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d304f4] focus:ring-1 focus:ring-[#d304f4]" placeholder="Votre nom">
-                  </div>
-                  <div class="col-span-2 space-y-2">
-                      <label class="text-sm text-[#c4b5d6] font-medium">Adresse</label>
-                      <input type="text" class="w-full bg-[#120024] border border-[#5a2080]/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d304f4] focus:ring-1 focus:ring-[#d304f4]" placeholder="Adresse, Appartement, etc.">
-                  </div>
-                  <div class="space-y-2">
-                      <label class="text-sm text-[#c4b5d6] font-medium">Code postal</label>
-                      <input type="text" class="w-full bg-[#120024] border border-[#5a2080]/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d304f4] focus:ring-1 focus:ring-[#d304f4]" placeholder="Code postal">
-                  </div>
-                  <div class="space-y-2">
-                      <label class="text-sm text-[#c4b5d6] font-medium">Ville</label>
-                      <input type="text" class="w-full bg-[#120024] border border-[#5a2080]/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d304f4] focus:ring-1 focus:ring-[#d304f4]" placeholder="Ville">
-                  </div>
-                  <div class="col-span-2 space-y-2">
-                      <label class="text-sm text-[#c4b5d6] font-medium">Téléphone</label>
-                      <input type="tel" class="w-full bg-[#120024] border border-[#5a2080]/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d304f4] focus:ring-1 focus:ring-[#d304f4]" placeholder="+221 XX XXX XX XX">
-                  </div>
-              </div>
-          </div>
-      </div>
+@if(session('error'))
+    <div class="mb-4 rounded border border-red-500/40 bg-red-500/10 px-4 py-3 text-red-300">
+        {{ session('error') }}
+    </div>
+@endif
 
-      <!-- Paiement details -->
-      <div class="bg-[#1a0035] border border-[#5a2080]/50 rounded-2xl overflow-hidden shadow-lg">
-          <div class="px-6 py-4 border-b border-[#5a2080]/30 bg-[#120024] flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                  <span class="w-8 h-8 rounded-full bg-[#3f047b] text-white flex items-center justify-center font-bold font-mono">2</span>
-                  <h2 class="text-xl font-bold">Moyen de paiement</h2>
-              </div>
-              <div class="flex gap-2 text-xl">💳</div>
-          </div>
-          <div class="p-6">
-              <div class="space-y-4">
-                  <!-- Card Option -->
-                  <label class="flex items-center justify-between p-4 border border-[#d304f4] rounded-xl bg-[#2a0550]/30 cursor-pointer">
-                      <div class="flex items-center gap-4">
-                          <input type="radio" name="payment" class="w-5 h-5 text-[#d304f4] bg-[#1a0035] border-[#5a2080] focus:ring-[#d304f4] focus:ring-offset-[#1a0035]" checked>
-                          <span class="font-bold">Carte Bancaire (Stripe)</span>
-                      </div>
-                      <div class="flex gap-2">
-                          <div class="w-8 h-5 bg-white/10 rounded flex items-center justify-center text-[8px] font-bold">VISA</div>
-                          <div class="w-8 h-5 bg-white/10 rounded flex items-center justify-center text-[8px] font-bold">MC</div>
-                      </div>
-                  </label>
-                  
-                  <!-- Form Card -->
-                  <div class="p-4 bg-[#120024] rounded-xl border border-[#5a2080]/30 ml-9 space-y-4">
-                      <div class="space-y-2">
-                          <label class="text-sm text-[#c4b5d6] font-medium">Titulaire de la carte</label>
-                          <input type="text" class="w-full bg-[#1a0035] border border-[#5a2080]/50 rounded-lg px-4 py-2 text-white placeholder-[#c4b5d6]/50 focus:outline-none focus:border-[#d304f4]" placeholder="Nom gravé sur la carte">
-                      </div>
-                      <div class="space-y-2">
-                          <label class="text-sm text-[#c4b5d6] font-medium">Numéro de carte</label>
-                          <div class="relative">
-                              <input type="text" class="w-full bg-[#1a0035] border border-[#5a2080]/50 rounded-lg pl-4 pr-12 py-2 text-white placeholder-[#c4b5d6]/50 focus:outline-none focus:border-[#d304f4]" placeholder="0000 0000 0000 0000">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-3 top-1/2 -translate-y-1/2 h-6 w-6 text-[#c4b5d6]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                          </div>
-                      </div>
-                      <div class="grid grid-cols-2 gap-4">
-                          <div class="space-y-2">
-                              <label class="text-sm text-[#c4b5d6] font-medium">Date d'expiration</label>
-                              <input type="text" class="w-full bg-[#1a0035] border border-[#5a2080]/50 rounded-lg px-4 py-2 text-white placeholder-[#c4b5d6]/50 focus:outline-none focus:border-[#d304f4]" placeholder="MM/AA">
-                          </div>
-                          <div class="space-y-2">
-                              <label class="text-sm text-[#c4b5d6] font-medium">CVC</label>
-                              <div class="relative">
-                                  <input type="text" class="w-full bg-[#1a0035] border border-[#5a2080]/50 rounded-lg pl-4 pr-10 py-2 text-white placeholder-[#c4b5d6]/50 focus:outline-none focus:border-[#d304f4]" placeholder="123">
-                                  <div class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border border-[#c4b5d6] flex items-center justify-center text-[10px] text-[#c4b5d6] hover:text-white cursor-help tooltip tooltip-top" data-tip="3 chiffres au dos de votre carte">?</div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+@if($errors->any())
+    <div class="mb-4 rounded border border-red-500/40 bg-red-500/10 px-4 py-3 text-red-300">
+        {{ $errors->first() }}
+    </div>
+@endif
 
-                  <!-- Other Options -->
-                  <label class="flex items-center p-4 border border-[#5a2080]/50 rounded-xl bg-[#1a0035] cursor-pointer hover:border-[#d304f4]/50 transition-colors">
-                      <input type="radio" name="payment" class="w-5 h-5 text-[#d304f4] bg-[#1a0035] border-[#5a2080] focus:ring-[#d304f4] focus:ring-offset-[#1a0035]">
-                      <span class="ml-4 font-bold">Paiement à la livraison</span>
-                  </label>
-              </div>
-          </div>
-      </div>
-  </section>
+@php
+    $currentStep = ! $hasStepOne ? 1 : (! $hasStepTwo ? 2 : 3);
+@endphp
 
-  <!-- Right sidebar -->
-  <aside>
-      <div class='sticky top-28 rounded-3xl border border-[#5a2080]/50 bg-gradient-to-br from-[#1a0035] to-[#120024] p-6 md:p-8 shadow-xl'>
-        <h3 class="text-xl font-bold mb-6 text-white border-b border-[#5a2080]/30 pb-4">Résumé de la commande</h3>
-        
-        <!-- Items minimal list -->
-        <div class="space-y-4 mb-6 pt-2 h-40 overflow-y-auto pr-2 custom-scrollbar">
-            <div class="flex gap-4">
-                <div class="w-16 h-16 rounded-lg bg-[#2a0550] flex items-center justify-center border border-[#5a2080]/50 relative">
-                    <span class="text-2xl">🎧</span>
-                    <span class="absolute -top-2 -right-2 w-5 h-5 bg-[#3f047b] rounded-full text-white text-[10px] flex items-center justify-center font-bold">1</span>
-                </div>
-                <div class="flex-1 text-sm">
-                    <p class="font-bold text-white truncate">Casque Pro X</p>
-                    <p class="text-[#d304f4] font-bold mt-1">19 900 FCFA</p>
-                </div>
-            </div>
-            <!-- More items can be iterated here from backend -->
-        </div>
-        
-        <div class="space-y-3 mb-6 pt-6 border-t border-[#5a2080]/30">
-            <div class="flex justify-between text-sm text-[#c4b5d6]">
-                <span>Sous-total</span>
-                <span>169 700 FCFA</span>
-            </div>
-            <div class="flex justify-between text-sm text-[#c4b5d6]">
-                <span>Livraison</span>
-                <span class="text-green-400">Gratuite</span>
-            </div>
-        </div>
-            
-        <div class="flex justify-between text-white text-xl font-black items-end mb-8 pt-4 border-t border-[#5a2080]/50">
-            <span>Total</span>
-            <span class="text-3xl text-[#d304f4] tracking-tight">169 700 <span class="text-sm">FCFA</span></span>
-        </div>
-        
-        <x-btn-primary class='w-full py-4 text-lg shadow-[0_0_20px_rgba(211,4,244,0.3)] hover:shadow-[0_0_30px_rgba(211,4,244,0.5)] flex items-center justify-center gap-2' onclick="window.location.href='{{ route('client.confirmation') }}'">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
-            Payer 169 700 FCFA
-        </x-btn-primary>
-        
-        <p class="text-center text-xs text-[#c4b5d6] mt-4 leading-relaxed">
-            Vos données personnelles seront utilisées pour le traitement de votre commande et conformément à notre politique de confidentialité.
-        </p>
-      </div>
-  </aside>
+<div class="mb-4 inline-flex items-center gap-2 rounded-full border border-[#5a2080] bg-[#120024] px-4 py-2 text-sm">
+    <span class="text-[#c4b5d6]">Current step:</span>
+    <span class="font-semibold text-[#d304f4]">{{ $currentStep }}</span>
 </div>
+
+<div class="mb-6 flex flex-wrap items-center gap-2">
+    <span class="rounded-full px-3 py-1 text-sm {{ $hasStepOne ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300' : 'bg-[#120024] border border-[#5a2080] text-[#c4b5d6]' }}">1 Shipping</span>
+    <span class="text-[#5a2080]">→</span>
+    <span class="rounded-full px-3 py-1 text-sm {{ $hasStepTwo ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300' : 'bg-[#120024] border border-[#5a2080] text-[#c4b5d6]' }}">2 Payment</span>
+    <span class="text-[#5a2080]">→</span>
+    <span class="rounded-full px-3 py-1 text-sm {{ $canConfirm ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300' : 'bg-[#120024] border border-[#5a2080] text-[#c4b5d6]' }}">3 Confirm</span>
+</div>
+
+<div class="grid lg:grid-cols-[1fr_360px] gap-6">
+    <section class="space-y-6">
+        @if(!$cart || $cart->items->isEmpty())
+            <x-card>
+                <p class="text-[#c4b5d6]">Your cart is empty. Add products first.</p>
+                <a href="{{ route('client.catalog') }}" class="inline-block mt-4 rounded-xl bg-[#d304f4] px-4 py-2 font-semibold">Go to catalog</a>
+            </x-card>
+        @else
+            <x-card>
+                <div id="step-1-anchor" class="h-0"></div>
+                <h2 class="text-xl font-semibold mb-4">Step 1 - Shipping details</h2>
+                <form method="POST" action="{{ route('client.checkout.step1') }}" class="grid gap-3 md:grid-cols-2">
+                    @csrf
+                    <input type="text" name="recipient_name" value="{{ old('recipient_name', $order?->recipient_name) }}" placeholder="Recipient name" required class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white">
+                    <input type="text" name="shipping_phone" value="{{ old('shipping_phone', $order?->shipping_phone) }}" placeholder="Phone" required class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white">
+                    <select name="zone_id" required class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white">
+                        <option value="">Select zone</option>
+                        @foreach($zones as $zone)
+                            <option value="{{ $zone->id }}" @selected((string)old('zone_id', $order?->delivery_zone_id) === (string)$zone->id)>
+                                {{ $zone->name }} (base {{ number_format((int)$zone->base_tariff_xof, 0, ',', ' ') }} XOF)
+                            </option>
+                        @endforeach
+                    </select>
+                    <input type="number" step="0.1" min="0" name="weight_kg" value="{{ old('weight_kg', 1) }}" placeholder="Estimated weight (kg)" class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white">
+                    <textarea name="shipping_address" placeholder="Shipping address" required class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white md:col-span-2">{{ old('shipping_address', $order?->shipping_address) }}</textarea>
+                    <textarea name="notes" placeholder="Notes (optional)" class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white md:col-span-2">{{ old('notes', $order?->notes) }}</textarea>
+                    <button class="rounded-xl bg-[#d304f4] px-4 py-2 font-semibold md:col-span-2">Save step 1</button>
+                </form>
+            </x-card>
+
+            <x-card class="{{ $hasStepOne ? '' : 'opacity-60' }}">
+                <div id="step-2-anchor" class="h-0"></div>
+                <h2 class="text-xl font-semibold mb-4">Step 2 - Payment method</h2>
+                @if(!$hasStepOne)
+                    <p class="text-[#c4b5d6]">Complete step 1 first to unlock payment options.</p>
+                @else
+                    <form method="POST" action="{{ route('client.checkout.step2', $order->id) }}" class="space-y-3">
+                        @csrf
+                        <label class="flex items-center gap-2"><input type="radio" name="payment_method" value="stripe" @checked($order->payment_method === 'stripe')> Stripe</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="payment_method" value="cinet" @checked($order->payment_method === 'cinet')> CinetPay</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="payment_method" value="paypal" @checked($order->payment_method === 'paypal')> PayPal</label>
+                        <label class="flex items-center gap-2"><input type="radio" name="payment_method" value="cod" @checked($order->payment_method === 'cod')> Cash on Delivery</label>
+                        <button class="rounded-xl border border-[#d304f4] px-4 py-2 font-semibold text-[#d304f4] hover:bg-[#d304f4] hover:text-white transition-colors">Save step 2</button>
+                    </form>
+                @endif
+            </x-card>
+
+            <x-card class="{{ $canConfirm ? '' : 'opacity-60' }}">
+                <div id="step-3-anchor" class="h-0"></div>
+                <h2 class="text-xl font-semibold mb-4">Step 3 - Confirm</h2>
+                @if(!$canConfirm)
+                    <p class="text-[#c4b5d6]">Select a payment method before confirming the order.</p>
+                @else
+                    <form method="POST" action="{{ route('client.checkout.confirm', $order->id) }}">
+                        @csrf
+                        <button class="rounded-xl bg-[#22c55e] px-4 py-2 font-semibold hover:bg-[#16a34a] transition-colors">Confirm order</button>
+                    </form>
+                @endif
+            </x-card>
+        @endif
+    </section>
+
+    <aside>
+        <x-card class="sticky top-28">
+            <h3 class="text-xl font-bold mb-4">Order summary</h3>
+            <div class="space-y-2 text-sm">
+                @forelse($cart?->items ?? [] as $item)
+                    <div class="flex justify-between gap-2">
+                        <span class="text-[#c4b5d6]">{{ $item->product?->name ?? 'Product' }} x{{ $item->quantity }}</span>
+                        <span>{{ number_format((int)($item->quantity * $item->unit_price_xof), 0, ',', ' ') }} XOF</span>
+                    </div>
+                @empty
+                    <p class="text-[#c4b5d6]">No items.</p>
+                @endforelse
+            </div>
+            <div class="mt-4 border-t border-[#5a2080] pt-3 space-y-2">
+                <div class="flex justify-between"><span class="text-[#c4b5d6]">Subtotal</span><span>{{ number_format($subtotal, 0, ',', ' ') }} XOF</span></div>
+                @if($order)
+                    <div class="flex justify-between"><span class="text-[#c4b5d6]">Delivery</span><span>{{ number_format((int)$order->delivery_fee_xof, 0, ',', ' ') }} XOF</span></div>
+                    <div class="flex justify-between text-lg font-semibold"><span>Total</span><span class="text-[#d304f4]">{{ number_format((int)$order->total_xof, 0, ',', ' ') }} XOF</span></div>
+                @endif
+            </div>
+        </x-card>
+    </aside>
+</div>
+
+<script>
+    (function () {
+        const currentStep = {{ $currentStep }};
+        const target = document.getElementById(`step-${currentStep}-anchor`);
+        if (!target) return;
+
+        requestAnimationFrame(() => {
+            const yOffset = -110;
+            const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+        });
+    })();
+</script>
 @endsection

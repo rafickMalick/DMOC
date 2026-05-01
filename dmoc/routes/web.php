@@ -13,17 +13,20 @@ Route::prefix('dmoc')->group(function () {
     Route::get('/home',         [ClientController::class, 'home'])->name('client.home');
     Route::get('/catalog',      [ClientController::class, 'catalog'])->name('client.catalog');
     Route::get('/product',      [ClientController::class, 'product'])->name('client.product');
-    Route::get('/cart',         [ClientController::class, 'cart'])->name('client.cart');
-    Route::get('/checkout',     [ClientController::class, 'checkout'])->name('client.checkout');
     Route::get('/tracking',     [ClientController::class, 'tracking'])->name('client.tracking');
     Route::get('/confirmation', [ClientController::class, 'confirmation'])->name('client.confirmation');
     Route::get('/auth',         [WebAuthController::class, 'showAuthForm'])->name('client.auth');
 });
 
 Route::prefix('dmoc')->middleware(['auth', 'role:client,vendeur,admin,superadmin'])->group(function () {
+    Route::get('/cart',         [ClientController::class, 'cart'])->name('client.cart');
+    Route::get('/checkout',     [ClientController::class, 'checkout'])->name('client.checkout');
     Route::get('/dashboard',    [ClientController::class, 'dashboard'])->name('client.dashboard');
     Route::get('/orders',       [ClientController::class, 'orders'])->name('client.orders');
     Route::get('/orders/{orderId}', [ClientController::class, 'orderShow'])->name('client.orders.show');
+    Route::post('/checkout/step-1', [ClientController::class, 'checkoutStepOne'])->name('client.checkout.step1');
+    Route::post('/checkout/{orderId}/step-2', [ClientController::class, 'checkoutStepTwo'])->name('client.checkout.step2');
+    Route::post('/checkout/{orderId}/confirm', [ClientController::class, 'checkoutConfirm'])->name('client.checkout.confirm');
     Route::get('/wishlist',     [ClientController::class, 'wishlist'])->name('client.wishlist');
     Route::get('/profile',      [ClientController::class, 'profile'])->name('client.profile');
 });
