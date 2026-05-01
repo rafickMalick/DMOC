@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use Illuminate\Http\Request;
+
 class ClientController extends Controller
 {
     public function home()
@@ -49,9 +52,26 @@ class ClientController extends Controller
         return view('client.dashboard');
     }
 
-    public function orders()
+    public function orders(Request $request)
     {
-        return view('client.orders');
+        $orders = Order::query()
+            ->with('zone')
+            ->where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate(10);
+
+        return view('client.orders', compact('orders'));
+    }
+
+    public function orderShow(Request $request, int $orderId)
+    {
+        $order = Order::query()
+            ->with(['items.product', 'zone', 'payments'])
+            ->where('id', $orderId)
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
+
+        return view('client.order-show', compact('order'));
     }
 
     public function wishlist()

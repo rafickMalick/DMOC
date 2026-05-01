@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DMOC — Fonctionnalités par Profil Utilisateur</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --violet: #3f047b;
+    --violet-light: #6a05c8;
+    --fuchsia: #d304f4;
+    --fuchsia-light: #e87ff7;
+    --bg: #0d0118;
+    --bg2: #150228;
+    --bg3: #1e0338;
+    --surface: rgba(255,255,255,0.04);
+    --surface-hover: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.08);
+    --border-accent: rgba(211,4,244,0.3);
+    --text: #f0e6ff;
+    --text-muted: rgba(240,230,255,0.5);
+    --text-dim: rgba(240,230,255,0.25);
+
+    --client: #1a9e75;
+    --client-bg: rgba(26,158,117,0.12);
+    --client-border: rgba(26,158,117,0.3);
+
+    --vendeur: #7f77dd;
+    --vendeur-bg: rgba(127,119,221,0.12);
+    --vendeur-border: rgba(127,119,221,0.3);
+
+    --livreur: #ef9f27;
+    --livreur-bg: rgba(239,159,39,0.12);
+    --livreur-border: rgba(239,159,39,0.3);
+
+    --admin: #378add;
+    --admin-bg: rgba(55,138,221,0.12);
+    --admin-border: rgba(55,138,221,0.3);
+
+    --superadmin: #d4537e;
+    --superadmin-bg: rgba(212,83,126,0.12);
+    --superadmin-border: rgba(212,83,126,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── Background ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(63,4,123,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 90% 80%, rgba(211,4,244,0.2) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 60% at 50% 50%, rgba(21,2,40,0.9) 0%, transparent 80%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── Grid pattern ─── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ─── Header ─── */
+  header {
+    padding: 64px 0 56px;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px solid var(--border-accent);
+    padding: 6px 16px; border-radius: 100px; margin-bottom: 28px;
+    font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--fuchsia-light);
+  }
+  .header-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--fuchsia); display: block; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  h1 em { font-style: normal; color: var(--fuchsia); }
+
+  .header-sub {
+    font-size: 15px; color: var(--text-muted); font-weight: 300;
+    max-width: 560px; margin-top: 16px; line-height: 1.6;
+  }
+
+  .header-meta {
+    display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap;
+  }
+  .meta-pill {
+    font-size: 12px; color: var(--text-dim); letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .meta-pill::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--text-dim); display: block; }
+
+  /* ─── Role nav ─── */
+  .role-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 40px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+    background: rgba(13,1,24,0.85);
+    backdrop-filter: blur(20px);
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .role-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 12px 8px; border-radius: 10px; cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent; color: var(--text-muted);
+    font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600;
+    text-align: center; transition: all 0.2s ease; letter-spacing: 0.3px;
+  }
+  .role-btn:hover { background: var(--surface-hover); color: var(--text); }
+  .role-btn.active { color: #fff; }
+
+  .role-btn .avatar {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; transition: all 0.2s;
+  }
+
+  .role-btn[data-r="client"] .avatar { background: var(--client-bg); color: var(--client); border: 1px solid var(--client-border); }
+  .role-btn[data-r="vendeur"] .avatar { background: var(--vendeur-bg); color: var(--vendeur); border: 1px solid var(--vendeur-border); }
+  .role-btn[data-r="livreur"] .avatar { background: var(--livreur-bg); color: var(--livreur); border: 1px solid var(--livreur-border); }
+  .role-btn[data-r="admin"] .avatar { background: var(--admin-bg); color: var(--admin); border: 1px solid var(--admin-border); }
+  .role-btn[data-r="superadmin"] .avatar { background: var(--superadmin-bg); color: var(--superadmin); border: 1px solid var(--superadmin-border); }
+
+  .role-btn[data-r="client"].active { background: var(--client-bg); border-color: var(--client-border); }
+  .role-btn[data-r="vendeur"].active { background: var(--vendeur-bg); border-color: var(--vendeur-border); }
+  .role-btn[data-r="livreur"].active { background: var(--livreur-bg); border-color: var(--livreur-border); }
+  .role-btn[data-r="admin"].active { background: var(--admin-bg); border-color: var(--admin-border); }
+  .role-btn[data-r="superadmin"].active { background: var(--superadmin-bg); border-color: var(--superadmin-border); }
+
+  /* ─── Panels ─── */
+  .panel { display: none; animation: fadeIn 0.25s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ─── Role hero ─── */
+  .role-hero {
+    display: flex; align-items: flex-start; gap: 20px;
+    padding: 28px 32px; border-radius: 16px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .role-hero::before {
+    content: attr(data-label);
+    position: absolute; right: 28px; top: 50%; transform: translateY(-50%);
+    font-family: 'Syne', sans-serif; font-size: 96px; font-weight: 800;
+    opacity: 0.04; letter-spacing: -4px; pointer-events: none;
+    color: #fff; white-space: nowrap;
+  }
+
+  .role-hero[data-r="client"] { background: var(--client-bg); border: 1px solid var(--client-border); }
+  .role-hero[data-r="vendeur"] { background: var(--vendeur-bg); border: 1px solid var(--vendeur-border); }
+  .role-hero[data-r="livreur"] { background: var(--livreur-bg); border: 1px solid var(--livreur-border); }
+  .role-hero[data-r="admin"] { background: var(--admin-bg); border: 1px solid var(--admin-border); }
+  .role-hero[data-r="superadmin"] { background: var(--superadmin-bg); border: 1px solid var(--superadmin-border); }
+
+  .hero-icon {
+    width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800;
+  }
+  .role-hero[data-r="client"] .hero-icon { background: rgba(26,158,117,0.2); color: var(--client); border: 1px solid var(--client-border); }
+  .role-hero[data-r="vendeur"] .hero-icon { background: rgba(127,119,221,0.2); color: var(--vendeur); border: 1px solid var(--vendeur-border); }
+  .role-hero[data-r="livreur"] .hero-icon { background: rgba(239,159,39,0.2); color: var(--livreur); border: 1px solid var(--livreur-border); }
+  .role-hero[data-r="admin"] .hero-icon { background: rgba(55,138,221,0.2); color: var(--admin); border: 1px solid var(--admin-border); }
+  .role-hero[data-r="superadmin"] .hero-icon { background: rgba(212,83,126,0.2); color: var(--superadmin); border: 1px solid var(--superadmin-border); }
+
+  .hero-text h2 {
+    font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700;
+    color: #fff; margin-bottom: 4px; letter-spacing: -0.5px;
+  }
+  .hero-text p { font-size: 14px; color: var(--text-muted); font-weight: 300; max-width: 500px; }
+  .hero-count {
+    margin-top: 12px; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
+  }
+  .role-hero[data-r="client"] .hero-count { color: var(--client); }
+  .role-hero[data-r="vendeur"] .hero-count { color: var(--vendeur); }
+  .role-hero[data-r="livreur"] .hero-count { color: var(--livreur); }
+  .role-hero[data-r="admin"] .hero-count { color: var(--admin); }
+  .role-hero[data-r="superadmin"] .hero-count { color: var(--superadmin); }
+
+  /* ─── Feature groups ─── */
+  .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+
+  .group {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; transition: border-color 0.2s;
+  }
+  .group:hover { border-color: rgba(255,255,255,0.14); }
+
+  .group-header {
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .group-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+  }
+  .group-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: 0.2px; }
+
+  .panel[data-r="client"] .group-icon { background: var(--client-bg); }
+  .panel[data-r="vendeur"] .group-icon { background: var(--vendeur-bg); }
+  .panel[data-r="livreur"] .group-icon { background: var(--livreur-bg); }
+  .panel[data-r="admin"] .group-icon { background: var(--admin-bg); }
+  .panel[data-r="superadmin"] .group-icon { background: var(--superadmin-bg); }
+
+  .feat-list { padding: 8px 0; }
+  .feat-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 20px; transition: background 0.15s;
+  }
+  .feat-item:hover { background: var(--surface-hover); }
+  .feat-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+
+  .panel[data-r="client"] .feat-dot { background: var(--client); }
+  .panel[data-r="vendeur"] .feat-dot { background: var(--vendeur); }
+  .panel[data-r="livreur"] .feat-dot { background: var(--livreur); }
+  .panel[data-r="admin"] .feat-dot { background: var(--admin); }
+  .panel[data-r="superadmin"] .feat-dot { background: var(--superadmin); }
+
+  .feat-text { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+  .feat-text strong { color: var(--text); font-weight: 500; }
+
+  /* ─── Summary table ─── */
+  .summary-section { margin-top: 64px; }
+  .summary-title {
+    font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700;
+    color: #fff; margin-bottom: 20px; letter-spacing: -0.5px;
+  }
+  .summary-title span { color: var(--fuchsia); }
+
+  .matrix {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+    background: var(--surface); border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .matrix th {
+    padding: 14px 16px; text-align: center;
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 11px;
+    letter-spacing: 0.5px; color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .matrix th:first-child { text-align: left; }
+  .matrix td {
+    padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    text-align: center; color: var(--text-muted); font-size: 13px;
+  }
+  .matrix td:first-child { text-align: left; font-size: 12px; color: var(--text-dim); font-weight: 500; }
+  .matrix tr:last-child td { border-bottom: none; }
+  .matrix tr:hover td { background: var(--surface-hover); }
+  .check { font-size: 14px; }
+  .partial { font-size: 11px; color: var(--text-dim); }
+
+  /* ─── Footer ─── */
+  footer {
+    margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-brand { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-dim); }
+  .footer-brand em { color: var(--fuchsia); font-style: normal; }
+  .footer-note { font-size: 11px; color: var(--text-dim); }
+
+  @media (max-width: 680px) {
+    .role-nav { grid-template-columns: repeat(3, 1fr); }
+    .groups { grid-template-columns: 1fr; }
+    .role-hero::before { display: none; }
+    .matrix { font-size: 11px; }
+    .matrix th, .matrix td { padding: 9px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header>
+    <div class="header-badge"><span></span>Digital Market Option Center</div>
+    <h1>Fonctionnalités<br>par <em>Profil</em></h1>
+    <p class="header-sub">Définition détaillée des accès et fonctionnalités pour chacun des 5 rôles utilisateurs de la plateforme DMOC.</p>
+    <div class="header-meta">
+      <span class="meta-pill">v1.0 — Avril 2025</span>
+      <span class="meta-pill">5 profils utilisateurs</span>
+      <span class="meta-pill">Stack : Laravel 11 · Livewire · Tailwind</span>
+    </div>
+  </header>
+
+  <!-- Role navigation -->
+  <nav class="role-nav" role="tablist">
+    <button class="role-btn active" data-r="client" onclick="switchRole('client',this)" role="tab">
+      <div class="avatar">C</div>Client
+    </button>
+    <button class="role-btn" data-r="vendeur" onclick="switchRole('vendeur',this)" role="tab">
+      <div class="avatar">V</div>Vendeur
+    </button>
+    <button class="role-btn" data-r="livreur" onclick="switchRole('livreur',this)" role="tab">
+      <div class="avatar">L</div>Livreur
+    </button>
+    <button class="role-btn" data-r="admin" onclick="switchRole('admin',this)" role="tab">
+      <div class="avatar">A</div>Admin
+    </button>
+    <button class="role-btn" data-r="superadmin" onclick="switchRole('superadmin',this)" role="tab">
+      <div class="avatar">SA</div>Super Admin
+    </button>
+  </nav>
+
+  <!-- ════════════ CLIENT ════════════ -->
+  <div class="panel active" id="panel-client" data-r="client">
+    <div class="role-hero" data-r="client" data-label="CLIENT">
+      <div class="hero-icon">C</div>
+      <div class="hero-text">
+        <h2>Client final</h2>
+        <p>Particulier en Afrique de l'Ouest ou acheteur international. Accès public + espace personnel après inscription.</p>
+        <div class="hero-count">21 fonctionnalités</div>
+      </div>
+    </div>
+    <div class="groups">
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">🔍</div>
+          <span class="group-title">Navigation & Catalogue</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Parcourir le catalogue avec <strong>filtres avancés</strong> (prix, catégorie, note)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Recherche intelligente</strong> en temps réel (live search)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Vue galerie zoomable avec <strong>images multiples</strong> par produit</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Voir les <strong>avis & notes</strong> laissés par d'autres clients</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Voir les <strong>produits similaires</strong> et recommandés</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Accéder aux <strong>offres flash</strong> avec compte à rebours</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Affichage des prix dans sa <strong>devise locale</strong> (XOF, EUR, USD, GHS, NGN)</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">🛒</div>
+          <span class="group-title">Achat & Paiement</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Ajouter / retirer des produits au <strong>panier persistant</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Appliquer des <strong>codes promo</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Checkout en 3 étapes</strong> maximum</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Payer via <strong>Mobile Money</strong> (Orange Money, MTN, Wave, Moov)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Payer via <strong>Stripe / PayPal / Flutterwave / CinetPay</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Paiement à la livraison (<strong>cash on delivery</strong>)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Calcul automatique des <strong>frais de port</strong> selon la zone</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">👤</div>
+          <span class="group-title">Espace personnel</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Créer un compte & se connecter (email / OAuth social)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Tableau de bord avec <strong>historique des commandes</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Suivi colis temps réel</strong> (carte Google Maps, lien public)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Recevoir des <strong>SMS automatiques</strong> à chaque étape de livraison</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Télécharger ses <strong>factures PDF</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer sa <strong>wishlist / favoris</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer son profil et ses <strong>adresses de livraison</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Laisser un <strong>avis après réception</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Interagir avec le <strong>bot Telegram</strong> DMOC (statut commande, support)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ VENDEUR ════════════ -->
+  <div class="panel" id="panel-vendeur" data-r="vendeur">
+    <div class="role-hero" data-r="vendeur" data-label="VENDEUR">
+      <div class="hero-icon">V</div>
+      <div class="hero-text">
+        <h2>Vendeur</h2>
+        <p>Gestionnaire d'une boutique sur DMOC. Accès limité à son propre catalogue et ses propres commandes uniquement.</p>
+        <div class="hero-count">13 fonctionnalités</div>
+      </div>
+    </div>
+    <div class="groups">
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">📦</div>
+          <span class="group-title">Gestion du catalogue</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Créer, modifier, supprimer <strong>ses propres produits</strong> (physiques, digitaux)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>variantes produits</strong> (taille, couleur, déclinaisons)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>stocks</strong> de ses produits avec alertes de rupture</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Ajouter et gérer les <strong>images produits</strong> (redimensionnement auto)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Import en masse</strong> de produits via fichier CSV ou Excel</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Assigner ses produits aux <strong>catégories existantes</strong></span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">🧾</div>
+          <span class="group-title">Gestion des commandes</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Voir <strong>uniquement les commandes</strong> concernant ses produits</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Mettre à jour le <strong>statut de préparation</strong> d'une commande</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Ajouter des <strong>notes internes</strong> à une commande</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>retours</strong> liés à ses produits</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">📊</div>
+          <span class="group-title">Tableau de bord & exports</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Voir ses <strong>KPIs personnels</strong> (CA, ventes, produits populaires)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Exporter</strong> ses données de vente en Excel</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Recevoir des <strong>alertes automatiques</strong> de rupture de stock</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ LIVREUR ════════════ -->
+  <div class="panel" id="panel-livreur" data-r="livreur">
+    <div class="role-hero" data-r="livreur" data-label="LIVREUR">
+      <div class="hero-icon">L</div>
+      <div class="hero-text">
+        <h2>Livreur</h2>
+        <p>Personnel terrain avec interface mobile dédiée. Accès uniquement aux livraisons qui lui sont assignées.</p>
+        <div class="hero-count">9 fonctionnalités</div>
+      </div>
+    </div>
+    <div class="groups">
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">🚚</div>
+          <span class="group-title">Gestion des livraisons</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Voir la liste des <strong>commandes assignées</strong> à livrer</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Accéder aux <strong>détails</strong> d'une commande (adresse, client, montant, produits)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Cliquer <strong>"Départ"</strong> pour déclencher le SMS de notification au client</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Confirmer la livraison</strong> réussie dans l'app</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Signaler un échec</strong> de livraison (déclenche SMS d'avertissement client)</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">📱</div>
+          <span class="group-title">Interface mobile terrain</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Interface <strong>100% optimisée smartphone</strong> (Mobile First)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Navigation GPS</strong> vers l'adresse du client</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Confirmer la <strong>réception du paiement</strong> à la livraison (cash)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Génération automatique du <strong>reçu électronique</strong> après confirmation</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ ADMIN ════════════ -->
+  <div class="panel" id="panel-admin" data-r="admin">
+    <div class="role-hero" data-r="admin" data-label="ADMIN">
+      <div class="hero-icon">A</div>
+      <div class="hero-text">
+        <h2>Admin</h2>
+        <p>Gestionnaire opérationnel de la plateforme. Accès complet aux commandes, produits et utilisateurs, sans configuration système.</p>
+        <div class="hero-count">19 fonctionnalités</div>
+      </div>
+    </div>
+    <div class="groups">
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">📦</div>
+          <span class="group-title">Catalogue & stocks</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">CRUD complet de <strong>tous les produits et catégories</strong> (y compris hiérarchies)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>stocks globaux</strong> avec alertes de rupture</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Import / export de produits en masse <strong>(CSV, Excel)</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Créer et gérer les <strong>codes promo et remises</strong></span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">🧾</div>
+          <span class="group-title">Commandes & paiements</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Voir et gérer <strong>toutes les commandes</strong> de la plateforme</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Mettre à jour le <strong>pipeline de statuts</strong> (En attente → Confirmée → Livrée)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>retours et remboursements</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Générer et télécharger les <strong>factures PDF</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Consulter l'historique des <strong>transactions de paiement</strong></span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">👥</div>
+          <span class="group-title">Utilisateurs & livraison</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>comptes clients et vendeurs</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Assigner les commandes</strong> aux livreurs disponibles</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Configurer les <strong>zones et tarifs de livraison</strong> en XOF</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>transporteurs et créneaux horaires</strong></span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">📊</div>
+          <span class="group-title">Reporting & monitoring</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Tableau de bord <strong>KPIs temps réel</strong> (CA, commandes, panier moyen, taux conversion)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Graphiques de ventes</strong> par période (Chart.js)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Recevoir les <strong>alertes automatiques</strong> (stock bas, paiement en attente)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Exporter</strong> les données en Excel (6 modules disponibles)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Recevoir les <strong>notifications Telegram admin</strong></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ SUPER ADMIN ════════════ -->
+  <div class="panel" id="panel-superadmin" data-r="superadmin">
+    <div class="role-hero" data-r="superadmin" data-label="SUPER ADMIN">
+      <div class="hero-icon">SA</div>
+      <div class="hero-text">
+        <h2>Super Admin</h2>
+        <p>Accès total à la plateforme. Inclut tout ce que peut faire l'Admin, plus la configuration système complète et la supervision globale.</p>
+        <div class="hero-count">19 + fonctionnalités Admin</div>
+      </div>
+    </div>
+    <div class="groups">
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">⚙️</div>
+          <span class="group-title">Configuration système</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Toutes les fonctionnalités de l'<strong>Admin</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Configurer les <strong>paramètres globaux</strong> de la plateforme</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>rôles et permissions</strong> de tous les utilisateurs</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Activer / désactiver</strong> les modules et intégrations tierces</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Configurer les <strong>langues et devises disponibles</strong> (i18n)</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">🔗</div>
+          <span class="group-title">Intégrations & APIs</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>fournisseurs SMS</strong> (Afrika's Talking, Twilio, Orange API)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>clés API tierces</strong> (Stripe, CinetPay, PayPal, Fixer.io…)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Configurer et gérer le <strong>bot Telegram</strong> (notifications, commandes)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer les <strong>webhooks</strong> pour les intégrations tierces</span></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-header">
+          <div class="group-icon">🛡️</div>
+          <span class="group-title">Rapports & sécurité</span>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Accéder aux <strong>rapports financiers globaux</strong></span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Voir la <strong>carte de chaleur</strong> des ventes par région</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text"><strong>Auditer les logs</strong> de transactions et de sécurité</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Accéder au <strong>monitoring d'erreurs</strong> (Sentry)</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Superviser les <strong>performances serveur</strong>, cache Redis et requêtes DB</span></div>
+          <div class="feat-item"><span class="feat-dot"></span><span class="feat-text">Gérer la <strong>configuration SSL / Cloudflare</strong> et les règles de sécurité</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ SUMMARY MATRIX ════════════ -->
+  <div class="summary-section">
+    <div class="summary-title">Matrice des <span>accès</span> par rôle</div>
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th>Fonctionnalité</th>
+          <th style="color:var(--client)">Client</th>
+          <th style="color:var(--vendeur)">Vendeur</th>
+          <th style="color:var(--livreur)">Livreur</th>
+          <th style="color:var(--admin)">Admin</th>
+          <th style="color:var(--superadmin)">Super Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Navigation catalogue & achat</td><td class="check">✅</td><td class="check">✅</td><td class="partial">—</td><td class="check">✅</td><td class="check">✅</td></tr>
+        <tr><td>Paiement Mobile Money / Stripe</td><td class="check">✅</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td></tr>
+        <tr><td>Suivi commande temps réel</td><td class="check">✅</td><td class="partial">—</td><td class="check">✅</td><td class="check">✅</td><td class="check">✅</td></tr>
+        <tr><td>SMS automatiques livraison</td><td class="check">📩 reçoit</td><td class="partial">—</td><td class="check">🔁 déclenche</td><td class="check">⚙️ configure</td><td class="check">✅</td></tr>
+        <tr><td>Gestion de son catalogue</td><td class="partial">—</td><td class="check">✅ (le sien)</td><td class="partial">—</td><td class="check">✅ (tous)</td><td class="check">✅</td></tr>
+        <tr><td>Gestion des commandes</td><td class="partial">—</td><td class="check">✅ (les siennes)</td><td class="partial">—</td><td class="check">✅ (toutes)</td><td class="check">✅</td></tr>
+        <tr><td>Gestion des livreurs</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="check">✅</td><td class="check">✅</td></tr>
+        <tr><td>Export Excel</td><td class="partial">—</td><td class="check">✅ (ses données)</td><td class="partial">—</td><td class="check">✅ (6 modules)</td><td class="check">✅</td></tr>
+        <tr><td>Tableau de bord KPIs</td><td class="partial">—</td><td class="check">✅ (ses KPIs)</td><td class="partial">—</td><td class="check">✅ (global)</td><td class="check">✅</td></tr>
+        <tr><td>Configuration rôles & accès</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="check">✅</td></tr>
+        <tr><td>Gestion APIs & intégrations</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="check">✅</td></tr>
+        <tr><td>Logs sécurité & audit</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="partial">—</td><td class="check">✅</td></tr>
+        <tr><td>Bot Telegram</td><td class="check">✅ (client)</td><td class="partial">—</td><td class="partial">—</td><td class="check">📩 notif</td><td class="check">✅ config</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span class="footer-brand"><em>DMOC</em> — Digital Market Option Center</span>
+    <span class="footer-note">Cahier des Charges Technique v1.0 — Document confidentiel — Avril 2025</span>
+  </footer>
+
+</div>
+
+<script>
+  function switchRole(role, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + role).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
