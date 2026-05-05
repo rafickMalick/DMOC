@@ -5,22 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DMOC - @yield('title', 'Admin')</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3f047b',
-                        accent: '#d304f4',
-                        surface: '#1a0035',
-                        input: '#2a0550',
-                        border: '#5a2080',
-                    }
-                }
-            }
-        }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="min-h-screen bg-[#120024] text-white font-sans antialiased">

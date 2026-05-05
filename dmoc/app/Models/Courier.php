@@ -12,10 +12,12 @@ use Illuminate\Database\Eloquent\Model;
     'license_number',
     'vehicle_type',
     'vehicle_plate',
+    'delivery_zone',
     'status',
     'rating',
     'completed_deliveries',
     'current_location',
+    'profile_photo_path',
 ])]
 class Courier extends Model
 {

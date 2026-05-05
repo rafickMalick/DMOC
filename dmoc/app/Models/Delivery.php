@@ -11,9 +11,14 @@ use Illuminate\Database\Eloquent\Model;
     'courier_id',
     'zone_id',
     'status',
+    'started_at',
     'assigned_at',
     'picked_up_at',
     'delivered_at',
+    'failed_reason',
+    'amount_expected',
+    'amount_received',
+    'cod_received_at',
     'notes',
     'weight_kg',
     'delivery_fee_xof',
@@ -24,9 +29,11 @@ class Delivery extends Model
     protected function casts(): array
     {
         return [
+            'started_at' => 'datetime',
             'assigned_at' => 'datetime',
             'picked_up_at' => 'datetime',
             'delivered_at' => 'datetime',
+            'cod_received_at' => 'datetime',
             'tracking_updates' => 'array',
         ];
     }

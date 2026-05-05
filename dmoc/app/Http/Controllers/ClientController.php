@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Payment;
@@ -55,7 +56,7 @@ class ClientController extends Controller
         $orderQuery = Order::query()
             ->with(['items.product', 'zone', 'payments'])
             ->where('user_id', auth()->id())
-            ->where('status', 'pending');
+            ->where('status', OrderStatus::Pending->value);
 
         if ($requestedOrderId) {
             $orderQuery->where('id', $requestedOrderId);
@@ -102,7 +103,7 @@ class ClientController extends Controller
                 'user_id' => $request->user()->id,
                 'total_xof' => $total,
                 'delivery_fee_xof' => $deliveryFee,
-                'status' => 'pending',
+                'status' => OrderStatus::Pending->value,
                 'delivery_zone_id' => $zone->id,
                 'estimated_delivery' => now()->addDays(2),
                 'shipping_address' => $validated['shipping_address'],
@@ -136,7 +137,7 @@ class ClientController extends Controller
         $order = Order::query()
             ->where('id', $orderId)
             ->where('user_id', $request->user()->id)
-            ->where('status', 'pending')
+            ->where('status', OrderStatus::Pending->value)
             ->firstOrFail();
 
         $order->update([
@@ -165,7 +166,7 @@ class ClientController extends Controller
             ->with('payments')
             ->where('id', $orderId)
             ->where('user_id', $request->user()->id)
-            ->where('status', 'pending')
+            ->where('status', OrderStatus::Pending->value)
             ->firstOrFail();
 
         $payment = $order->payments->sortByDesc('id')->first();
@@ -179,7 +180,7 @@ class ClientController extends Controller
                     'status' => 'success',
                     'response_data' => ['source' => 'web_checkout_confirm', 'message' => 'COD confirmed'],
                 ]);
-                $order->update(['status' => 'confirmed']);
+                $order->update(['status' => OrderStatus::Confirmed->value]);
             } else {
                 $payment->update([
                     'status' => 'processing',

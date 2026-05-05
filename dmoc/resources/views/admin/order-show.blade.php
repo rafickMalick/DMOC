@@ -34,10 +34,12 @@
     <form method="POST" action="{{ route('admin.orders.status', $order->id) }}" class="flex flex-wrap gap-3">
         @csrf
         <select name="status" class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white">
+            <option value="">Selectionner une transition</option>
             @foreach($allowedStatuses as $status)
-                <option value="{{ $status }}" @selected($order->status === $status)>{{ $status }}</option>
+                <option value="{{ $status }}">{{ \App\Support\StatusHelper::orderLabel($status) }}</option>
             @endforeach
         </select>
+        <input type="text" name="note" placeholder="Note (optionnelle)" class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white" />
         <button class="rounded bg-[#d304f4] px-4 py-2 font-semibold">Mettre a jour</button>
     </form>
 </x-card>
@@ -58,12 +60,28 @@
             <option value="">Selectionner un livreur</option>
             @foreach($couriers as $courier)
                 <option value="{{ $courier->id }}">
-                    {{ $courier->user?->name ?? 'Livreur' }} - {{ $courier->vehicle_type }} - note {{ $courier->rating }}
+                    {{ $courier->user?->name ?? 'Livreur' }} - {{ $courier->vehicle_type }} - note {{ $courier->rating }} - {{ $courier->missions_in_progress }} mission(s) en cours
                 </option>
             @endforeach
         </select>
         <button class="rounded bg-[#d304f4] px-4 py-2 font-semibold">Assigner</button>
     </form>
+</x-card>
+
+<x-card class="mb-6">
+    <h2 class="text-xl font-semibold mb-3">Annuler la commande</h2>
+    <form method="POST" action="{{ route('admin.orders.cancel', $order->id) }}" class="flex flex-wrap gap-3" onsubmit="return confirm('Confirmer l annulation ?');">
+        @csrf
+        <input type="text" name="reason" required placeholder="Motif d annulation (obligatoire)" class="min-w-80 rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white" />
+        <button class="rounded border border-red-500/60 px-4 py-2 text-red-300">Annuler la commande</button>
+    </form>
+</x-card>
+
+<x-card class="mb-6">
+    <h2 class="text-xl font-semibold mb-3">Statut actuel</h2>
+    <span class="rounded-full border px-3 py-1 text-xs uppercase {{ \App\Support\StatusHelper::orderBadgeClasses($order->status) }}">
+        {{ \App\Support\StatusHelper::orderLabel($order->status) }}
+    </span>
 </x-card>
 
 <x-card class="mb-6">
@@ -89,6 +107,31 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+</x-card>
+
+<x-card class="mb-6">
+    <h2 class="text-xl font-semibold mb-3">Historique des statuts</h2>
+    <div class="space-y-3">
+        @forelse($order->statusLogs as $log)
+            <div class="rounded border border-[#5a2080] px-3 py-2">
+                <p class="text-sm">
+                    <span class="text-[#c4b5d6]">{{ $log->created_at?->format('d/m/Y H:i') }}</span>
+                    -
+                    {{ \App\Support\StatusHelper::orderLabel((string) $log->from_status) }}
+                    →
+                    {{ \App\Support\StatusHelper::orderLabel($log->to_status) }}
+                </p>
+                <p class="text-xs text-[#c4b5d6]">
+                    Par: {{ $log->actor?->name ?? 'Systeme' }}
+                    @if($log->note)
+                        - {{ $log->note }}
+                    @endif
+                </p>
+            </div>
+        @empty
+            <p class="text-sm text-[#c4b5d6]">Aucun changement de statut enregistre.</p>
+        @endforelse
     </div>
 </x-card>
 

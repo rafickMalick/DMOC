@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
     'shipping_phone',
     'recipient_name',
     'notes',
+    'cancelled_reason',
 ])]
 class Order extends Model
 {
@@ -53,5 +54,10 @@ class Order extends Model
     public function delivery(): HasOne
     {
         return $this->hasOne(Delivery::class);
+    }
+
+    public function statusLogs(): HasMany
+    {
+        return $this->hasMany(OrderStatusLog::class)->latest();
     }
 }

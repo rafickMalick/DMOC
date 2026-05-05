@@ -5,25 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DMOC - @yield('title', 'Client')</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3f047b',
-                        accent: '#d304f4',
-                        surface: '#1a0035',
-                        input: '#2a0550',
-                        border: '#5a2080',
-                    }
-                }
-            }
-        }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
+    <style>[x-cloak]{display:none!important}</style>
 </head>
 
-<body
+<body x-data="{ drawerOpen: false, userMenuOpen: false, darkMode: localStorage.getItem('dmoc-theme') !== 'light', toasts: [] }"
+    x-init="$watch('darkMode', value => { document.documentElement.classList.toggle('dark', value); localStorage.setItem('dmoc-theme', value ? 'dark' : 'light'); }); document.documentElement.classList.toggle('dark', darkMode); window.addEventListener('dmoc-toast', (event) => { toasts.push({ id: Date.now() + Math.random(), ...event.detail }); setTimeout(() => toasts.shift(), 3000); });"
+    @click="userMenuOpen = false"
     class="bg-[#120024] text-white font-sans antialiased overflow-x-hidden selection:bg-[#d304f4] selection:text-white">
 
     <!-- Top Banner -->
@@ -84,7 +73,7 @@
             <!-- Actions (Cart/Profile) -->
             <div class="hidden md:flex items-center justify-end gap-6 w-48">
                 <div class="flex items-center gap-4 relative">
-                    <button id="userBtn" class="text-[#c4b5d6] hover:text-white transition-colors">
+                    <button @click.stop="userMenuOpen = !userMenuOpen" class="text-[#c4b5d6] hover:text-white transition-colors">
                         <svg class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -92,16 +81,19 @@
                         </svg>
                     </button>
 
-                    <div id="userMenu"
-                        class="absolute top-10 right-0 mt-2 hidden w-48 rounded-xl border border-[#2a0550] bg-[#0a0015] p-2 shadow-2xl opacity-0 translate-y-2 transition-all duration-200 origin-top-right z-50">
+                    <div x-cloak x-show="userMenuOpen" @click.stop
+                        class="absolute top-10 right-0 z-50 mt-2 w-48 origin-top-right rounded-xl border border-[#2a0550] bg-[#0a0015] p-2 shadow-2xl">
                         <a href="{{ route('client.profile') }}"
                             class="block rounded-lg px-4 py-2.5 text-sm hover:bg-[#1a0035] hover:text-[#d304f4] transition-colors text-white">Mon
                             profil</a>
                         <a href="{{ route('client.dashboard') }}"
                             class="block rounded-lg px-4 py-2.5 text-sm hover:bg-[#1a0035] hover:text-[#d304f4] transition-colors text-white">Dashboard</a>
                         <div class="h-px bg-[#2a0550] my-1"></div>
-                        <a href="{{ route('client.auth') }}"
-                            class="block rounded-lg px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/10 transition-colors">Déconnexion</a>
+                        <form method="POST" action="{{ route('auth.logout') }}">
+                            @csrf
+                            <button
+                                class="block w-full rounded-lg px-4 py-2.5 text-left text-sm text-red-500 hover:bg-red-500/10 transition-colors">Deconnexion</button>
+                        </form>
                     </div>
                 </div>
 
@@ -112,11 +104,22 @@
                             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     Panier
+                    @php
+                        $cartCount = auth()->check()
+                            ? (int) (\App\Models\Cart::query()
+                                ->where('user_id', auth()->id())
+                                ->first()?->items()
+                                ->sum('quantity') ?? 0)
+                            : 0;
+                    @endphp
+                    @if($cartCount > 0)
+                        <span class="rounded-full bg-[#d304f4] px-2 py-0.5 text-xs">{{ $cartCount }}</span>
+                    @endif
                 </a>
             </div>
 
             <!-- Mobile Menu Toggle -->
-            <button id="openDrawer" class="md:hidden text-[#c4b5d6] hover:text-white p-2">
+            <button @click.stop="drawerOpen = true" class="md:hidden text-[#c4b5d6] hover:text-white p-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -126,11 +129,11 @@
     </nav>
 
     <!-- Mobile Sidebar -->
-    <aside id="drawer"
-        class="fixed right-0 top-0 z-[100] h-full w-80 translate-x-full bg-[#1a0035] border-l border-[#5a2080] shadow-2xl transition-transform duration-300 ease-in-out md:hidden flex flex-col">
+    <aside :class="drawerOpen ? 'translate-x-0' : 'translate-x-full'"
+        class="fixed right-0 top-0 z-[100] flex h-full w-80 flex-col border-l border-[#5a2080] bg-[#1a0035] shadow-2xl transition-transform duration-300 ease-in-out md:hidden">
         <div class="p-6 border-b border-[#5a2080]/50 flex items-center justify-between">
             <span class="text-xl font-black">Menu</span>
-            <button id="closeDrawer" class="text-[#c4b5d6] hover:text-white p-2 -mr-2">
+            <button @click="drawerOpen = false" class="text-[#c4b5d6] hover:text-white p-2 -mr-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -155,6 +158,11 @@
             </a>
         </div>
     </aside>
+
+    <button @click="darkMode = !darkMode"
+        class="fixed bottom-24 right-4 z-40 rounded-full border border-[#5a2080] bg-[#120024] p-3 text-xs shadow-lg md:bottom-6">
+        <span x-text="darkMode ? 'Mode clair' : 'Mode sombre'"></span>
+    </button>
 
     <!-- Main content -->
     <main class="mx-auto max-w-[90rem] px-4 md:px-8 pt-8 pb-24">@yield('content')</main>
@@ -211,44 +219,36 @@
         </div>
     </footer>
 
+    <nav class="fixed inset-x-0 bottom-0 z-50 border-t border-[#2a0550] bg-[#0a0015] md:hidden">
+        <div class="mx-auto grid max-w-md grid-cols-4 text-xs">
+            <a href="{{ route('client.home') }}" class="px-3 py-3 text-center">Accueil</a>
+            <a href="{{ route('client.catalog') }}" class="px-3 py-3 text-center">Catalogue</a>
+            <a href="{{ route('client.cart') }}" class="px-3 py-3 text-center">Panier</a>
+            <a href="{{ route('client.profile') }}" class="px-3 py-3 text-center">Profil</a>
+        </div>
+    </nav>
+
+    <div class="fixed right-4 top-24 z-[120] w-80 space-y-2">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div class="rounded-lg border px-4 py-3 text-sm shadow-xl"
+                :class="{
+                    'border-emerald-500/40 bg-emerald-500/20 text-emerald-100': toast.type === 'success',
+                    'border-red-500/40 bg-red-500/20 text-red-100': toast.type === 'error',
+                    'border-cyan-500/40 bg-cyan-500/20 text-cyan-100': toast.type === 'info'
+                }">
+                <span x-text="toast.message"></span>
+            </div>
+        </template>
+    </div>
+
     <script>
-        document.getElementById('openDrawer')?.addEventListener('click', () => document.getElementById('drawer')?.classList.remove('translate-x-full'));
-        document.getElementById('closeDrawer')?.addEventListener('click', () => document.getElementById('drawer')?.classList.add('translate-x-full'));
-
-        const userBtn = document.getElementById('userBtn');
-        const userMenu = document.getElementById('userMenu');
-
-        if (userBtn && userMenu) {
-            userBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isHidden = userMenu.classList.contains('hidden');
-                if (isHidden) {
-                    userMenu.classList.remove('hidden');
-                    // small delay to allow display:block to apply before animating opacity
-                    setTimeout(() => {
-                        userMenu.classList.remove('opacity-0', 'translate-y-2');
-                        userMenu.classList.add('opacity-100', 'translate-y-0');
-                    }, 10);
-                } else {
-                    userMenu.classList.remove('opacity-100', 'translate-y-0');
-                    userMenu.classList.add('opacity-0', 'translate-y-2');
-                    setTimeout(() => {
-                        userMenu.classList.add('hidden');
-                    }, 200); // match duration
-                }
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('toast', ({ type, message }) => {
+                window.showToast(type, message);
             });
-
-            document.addEventListener('click', (e) => {
-                if (!userMenu.contains(e.target) && !userBtn.contains(e.target) && !userMenu.classList.contains('hidden')) {
-                    userMenu.classList.remove('opacity-100', 'translate-y-0');
-                    userMenu.classList.add('opacity-0', 'translate-y-2');
-                    setTimeout(() => {
-                        userMenu.classList.add('hidden');
-                    }, 200);
-                }
-            });
-        }
+        });
     </script>
+    @livewireScripts
 </body>
 
 </html>

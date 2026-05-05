@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DeliveryStatus;
+use App\Enums\OrderStatus;
 use App\Models\Courier;
 use App\Models\Delivery;
+use App\Models\OrderStatusLog;
 use App\Models\Payment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,17 +46,17 @@ class CourierController extends Controller
         $courier = $this->getCourier($request);
         $delivery = $this->getCourierDelivery($request, $deliveryId);
 
-        if (! in_array($delivery->status, ['pending', 'assigned', 'picked_up'], true)) {
+        if (! in_array($delivery->status, [DeliveryStatus::Pending->value, DeliveryStatus::Assigned->value], true)) {
             return back()->with('error', 'Cette livraison ne peut pas demarrer dans son etat actuel.');
         }
 
         $delivery->update([
-            'status' => 'in_transit',
+            'status' => DeliveryStatus::InDelivery->value,
             'assigned_at' => $delivery->assigned_at ?? now(),
             'picked_up_at' => $delivery->picked_up_at ?? now(),
         ]);
 
-        $delivery->order?->update(['status' => 'shipped']);
+        $this->setOrderStatus($delivery, OrderStatus::InDelivery->value, 'Prise en charge par le livreur.');
 
         return back()->with('success', 'Livraison demarree avec succes.');
     }
@@ -63,16 +66,16 @@ class CourierController extends Controller
         $courier = $this->getCourier($request);
         $delivery = $this->getCourierDelivery($request, $deliveryId);
 
-        if (! in_array($delivery->status, ['in_transit', 'picked_up'], true)) {
+        if (! in_array($delivery->status, [DeliveryStatus::InDelivery->value], true)) {
             return back()->with('error', 'Cette livraison ne peut pas etre marquee livree.');
         }
 
         $delivery->update([
-            'status' => 'delivered',
+            'status' => DeliveryStatus::Delivered->value,
             'delivered_at' => now(),
         ]);
 
-        $delivery->order?->update(['status' => 'delivered']);
+        $this->setOrderStatus($delivery, OrderStatus::Delivered->value, 'Livraison finalisee par le livreur.');
 
         $courier->increment('completed_deliveries');
 
@@ -92,9 +95,12 @@ class CourierController extends Controller
         }
 
         $delivery->update([
-            'status' => 'failed',
+            'status' => DeliveryStatus::Failed->value,
             'notes' => $validated['reason'] ?? $delivery->notes,
+            'failed_reason' => $validated['reason'] ?? $delivery->failed_reason,
         ]);
+
+        $this->setOrderStatus($delivery, OrderStatus::Failed->value, 'Livraison en echec: '.($validated['reason'] ?? 'motif non precise'));
 
         return back()->with('success', 'Echec de livraison enregistre.');
     }
@@ -171,5 +177,24 @@ class CourierController extends Controller
             ->with($with)
             ->where('courier_id', $courier->id)
             ->findOrFail($deliveryId);
+    }
+
+    private function setOrderStatus(Delivery $delivery, string $toStatus, ?string $note = null): void
+    {
+        $order = $delivery->order;
+        if (! $order || $order->status === $toStatus) {
+            return;
+        }
+
+        $fromStatus = $order->status;
+        $order->update(['status' => $toStatus]);
+
+        OrderStatusLog::query()->create([
+            'order_id' => $order->id,
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
+            'changed_by' => auth()->id(),
+            'note' => $note,
+        ]);
     }
 }

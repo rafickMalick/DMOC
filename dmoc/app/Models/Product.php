@@ -17,11 +17,13 @@ use Illuminate\Database\Eloquent\Model;
     'category_id',
     'stock',
     'is_digital',
+    'is_active',
     'image_path',
     'rating',
 ])]
 #[Casts([
     'is_digital' => 'boolean',
+    'is_active' => 'boolean',
 ])]
 class Product extends Model
 {
