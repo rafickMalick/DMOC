@@ -122,7 +122,7 @@ class CourierController extends Controller
                 'method' => 'cod',
                 'amount_xof' => $order->total_xof,
                 'status' => 'success',
-                'reference' => 'DMOC-COD-'.Str::upper(Str::random(10)),
+                'reference' => 'dmoc-COD-'.Str::upper(Str::random(10)),
                 'response_data' => ['source' => 'courier_cod_confirmation'],
             ]);
         } else {

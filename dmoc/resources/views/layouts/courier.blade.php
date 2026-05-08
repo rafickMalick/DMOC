@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMOC - @yield('title', 'Livreur')</title>
+    <title>dmoc - @yield('title', 'Livreur')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     <style>[x-cloak]{display:none!important}</style>
@@ -18,7 +18,7 @@
     <nav class="sticky top-0 z-40 bg-[#0d001c]/90 backdrop-blur-md border-b border-[#5a2080]/60">
         <div class="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-3 px-4 py-4">
             <div>
-                <a href="{{ route('courier.list') }}" class="text-2xl font-black tracking-tight">DMOC</a>
+                <a href="{{ route('courier.list') }}" class="text-2xl font-black tracking-tight">DMC</a>
                 <p class="text-xs text-[#c4b5d6]">Courier Workspace</p>
             </div>
 

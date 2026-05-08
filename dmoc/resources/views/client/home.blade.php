@@ -3,7 +3,7 @@
 @section('content')
 
     {{-- SECTION HERO --}}
-    <section class='relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 pb-16 bg-[#0a0015] -mt-10'>
+    <section class='relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 pb-16 bg-[#fb923c] -mt-10'>
 
         <!-- Top Horizontal Light Beam -->
         <div
@@ -18,13 +18,13 @@
             <div class="space-y-6 md:space-y-8 text-center lg:text-left pt-10">
                 <h2
                     class="inline-block font-semibold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#d304f4] to-[#2dd4bf] text-lg md:text-2xl">
-                    One-stop DMOC Theme
+                    One-stop DMC Theme
                 </h2>
                 <h1 class='text-5xl md:text-7xl lg:text-[5rem] leading-[1.05] font-black tracking-tight text-white mb-4'>
                     Prime Quality<br />Premium Design
                 </h1>
                 <p class='text-lg md:text-xl text-[#c4b5d6] max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium'>
-                    Créez une boutique e-commerce magnifique et à fort taux de conversion avec le thème DMOC. Optimisé pour
+                    Créez une boutique e-commerce magnifique et à fort taux de conversion avec le thème DMC. Optimisé pour
                     la vitesse et l'expérience utilisateur.
                 </p>
                 <div class='flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-6'>
@@ -45,7 +45,7 @@
             <!-- Mockup Interface -->
             <div class="relative w-full perspective-[2000px] mt-10 lg:mt-0">
                 <div
-                    class="relative w-full rounded-[1.5rem] bg-[#141416]/90 border border-[#2a2a2b] shadow-2xl p-4 md:p-5 backdrop-blur-3xl overflow-hidden">
+                    class="relative w-full rounded-[1.5rem] bg-[#f97316]/90 border border-[#ffedd5]/70 shadow-2xl p-4 md:p-5 backdrop-blur-3xl overflow-hidden">
                     <!-- Browser Header Elements -->
                     <div class="absolute top-4 left-4 flex gap-1.5 z-20">
                         <div class="w-2.5 h-2.5 rounded-full bg-[#3f3f40] border border-[#525255]"></div>
@@ -72,17 +72,17 @@
 
                     <!-- Mockup Content -->
                     <div
-                        class="flex h-[450px] w-full rounded-xl bg-[#0f0f11] border border-[#2a2a2b] overflow-hidden mt-8 relative">
+                        class="flex h-[450px] w-full rounded-xl bg-[#fff7ed] border border-[#fdba74] overflow-hidden mt-8 relative">
                         <!-- Sidebar -->
                         <div
-                            class="w-1/3 max-w-[200px] border-r border-[#2a2a2b] bg-[#141416] p-4 flex flex-col gap-8 hidden sm:flex">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-2xl font-bold text-white tracking-tighter">dmoc<span
-                                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#d304f4] to-cyan-400">.</span></span>
+                            class="w-1/3 max-w-[200px] border-r border-[#fdba74] bg-[#ea580c] p-4 flex flex-col gap-8 hidden sm:flex">
+                                <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold text-white tracking-tighter">DMC<span
+                                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#fff7ed] to-[#ffedd5]">.</span></span>
                             </div>
                             <div class="space-y-4">
                                 <!-- Nav item -->
-                                <div class="flex items-center justify-between p-2 rounded-lg bg-[#2a2a2b] cursor-pointer">
+                                <div class="flex items-center justify-between p-2 rounded-lg bg-[#c2410c]/70 cursor-pointer">
                                     <div class="flex items-center gap-3">
                                         <div class="w-6 h-6 rounded-md bg-[#2dd4bf] flex items-center justify-center"><svg
                                                 class="w-4 h-4 text-[#141416]" fill="none" viewBox="0 0 24 24"
@@ -100,7 +100,7 @@
                                 </div>
                                 <!-- Inactive items -->
                                 <div
-                                    class="flex items-center justify-between p-2 hover:bg-[#2a2a2b]/50 rounded-lg cursor-pointer transition-colors">
+                                    class="flex items-center justify-between p-2 hover:bg-[#c2410c]/60 rounded-lg cursor-pointer transition-colors">
                                     <div class="flex items-center gap-3">
                                         <div
                                             class="w-6 h-6 rounded-md border border-[#2a2a2b] flex items-center justify-center text-[#c4b5d6]">
@@ -118,7 +118,7 @@
                                     </svg>
                                 </div>
                                 <div
-                                    class="flex items-center justify-between p-2 hover:bg-[#2a2a2b]/50 rounded-lg cursor-pointer transition-colors">
+                                    class="flex items-center justify-between p-2 hover:bg-[#c2410c]/60 rounded-lg cursor-pointer transition-colors">
                                     <div class="flex items-center gap-3">
                                         <div
                                             class="w-6 h-6 rounded-md border border-[#2a2a2b] flex items-center justify-center text-[#c4b5d6]">
@@ -136,7 +136,7 @@
                                     </svg>
                                 </div>
                                 <div
-                                    class="flex items-center justify-between p-2 hover:bg-[#2a2a2b]/50 rounded-lg cursor-pointer transition-colors">
+                                    class="flex items-center justify-between p-2 hover:bg-[#c2410c]/60 rounded-lg cursor-pointer transition-colors">
                                     <div class="flex items-center gap-3">
                                         <div
                                             class="w-6 h-6 rounded-md border border-[#2a2a2b] flex items-center justify-center text-[#c4b5d6]">
@@ -161,7 +161,7 @@
                             <!-- Top header of mockup -->
                             <div
                                 class="h-10 border-b border-gray-100 flex items-center justify-between px-6 bg-white w-full">
-                                <div class="font-bold text-gray-800 text-lg">dmoc.</div>
+                                <div class="font-bold text-gray-800 text-lg">DMC.</div>
                                 <!-- Mock nav links -->
                                 <div class="hidden md:flex gap-4 text-[9px] text-gray-500 font-medium tracking-wide">
                                     <span class="text-black font-bold border-b border-black">Demo</span>
@@ -473,7 +473,7 @@
                 <div class="text-4xl absolute -top-4 -right-4 bg-[#1a0035] p-2 rounded-full border border-[#2a0550]">💬
                 </div>
                 <p class="text-[#c4b5d6] italic">"Service incroyable. J'ai commandé mon iPhone le matin, reçu avant le
-                    déjeuner. DMOC est devenu mon incontournable."</p>
+                    déjeuner. DMC est devenu mon incontournable."</p>
                 <div class="flex items-center gap-4 pt-4">
                     <div class="w-12 h-12 rounded-full bg-[#d304f4] flex items-center justify-center font-bold text-white">
                         MD</div>
@@ -503,7 +503,7 @@
                 class="bg-[#1a0035] border border-[#2a0550] p-8 rounded-3xl space-y-4 relative group hover:border-[#d304f4] transition-all">
                 <div class="text-4xl absolute -top-4 -right-4 bg-[#1a0035] p-2 rounded-full border border-[#2a0550]">🚀
                 </div>
-                <p class="text-[#c4b5d6] italic">"Je recommande DMOC à tous mes amis. Le support client est réactif et les
+                <p class="text-[#c4b5d6] italic">"Je recommande DMC à tous mes amis. Le support client est réactif et les
                     prix sont très compétitifs."</p>
                 <div class="flex items-center gap-4 pt-4">
                     <div class="w-12 h-12 rounded-full bg-cyan-500 flex items-center justify-center font-bold text-white">AB
@@ -514,6 +514,22 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    {{-- NEWSLETTER + FLASH OFFER --}}
+    <section class="mb-20 rounded-3xl border border-[#5a2080]/50 bg-[#120024] p-8 md:p-12">
+        <div class="grid gap-8 md:grid-cols-2 md:items-center">
+            <div>
+                <p class="text-sm uppercase tracking-wider text-[#d304f4]">Flash offer</p>
+                <h3 class="mt-2 text-3xl font-black">Offre se termine dans <span id="flash-countdown" class="text-[#d304f4]">--:--:--</span></h3>
+                <p class="mt-3 text-[#c4b5d6]">Inscris-toi a notre newsletter pour recevoir les promos et nouveaux produits.</p>
+            </div>
+            <form class="flex flex-col gap-3 sm:flex-row" method="GET" action="{{ route('client.catalog') }}">
+                <input type="email" required placeholder="votre@email.com"
+                       class="w-full rounded-xl border border-[#5a2080] bg-[#1a0035] px-4 py-3 text-white">
+                <button class="rounded-xl bg-[#d304f4] px-5 py-3 font-semibold">S'abonner</button>
+            </form>
         </div>
     </section>
 
@@ -537,6 +553,16 @@
                     slides[currentSlide].classList.add('opacity-100');
                 }, 3000); // 3 seconds interval
             }
+
+            const countdown = document.getElementById('flash-countdown');
+            const end = Date.now() + (6 * 60 * 60 * 1000);
+            setInterval(() => {
+                const left = Math.max(end - Date.now(), 0);
+                const h = Math.floor(left / 3600000).toString().padStart(2, '0');
+                const m = Math.floor((left % 3600000) / 60000).toString().padStart(2, '0');
+                const s = Math.floor((left % 60000) / 1000).toString().padStart(2, '0');
+                if (countdown) countdown.textContent = `${h}:${m}:${s}`;
+            }, 1000);
         });
     </script>
 

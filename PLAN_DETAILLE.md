@@ -1,4 +1,4 @@
-# 🚀 PLAN DÉTAILLÉ DE DÉVELOPPEMENT DMOC
+# 🚀 PLAN DÉTAILLÉ DE DÉVELOPPEMENT dmoc
 
 ## 📊 ANALYSE DE L'EXISTANT
 
@@ -26,13 +26,13 @@
 #### 1.1 Architecture Base de Données
 - [x] Création migrations : `users`, `products`, `categories`, `orders`, `order_items`
 - [x] Création migrations : `carts`, `cart_items`, `payments`, `zones`, `couriers`, `deliveries`
-- [ ] Création migrations : `locales`, `translations`, `permissions`, `roles`
+- [x] Création migrations : `locales`, `translations`, `permissions`, `roles`
 - [x] Seeding données de test (produits, catégories, zones)
 - **Responsable** : Dev 1 | **Durée** : 1.5j
 
 #### 1.2 Modèles Eloquent & Relations
 - [x] Modèle `User` avec rôles (client, vendeur, livreur, admin, superadmin)
-- [ ] Modèle `Product`, `Category`, `ProductVariant`
+- [x] Modèle `Product`, `Category`, `ProductVariant`
 - [x] Modèle `Order`, `OrderItem`, `Payment`, `Delivery`
 - [x] Modèle `Cart`, `CartItem`, `Zone`, `Locale`
 - [x] Configuration des relations Many-to-Many et polymorphiques
@@ -41,25 +41,25 @@
 #### 1.3 Authentification Complète
 - [x] Laravel Sanctum setup (API tokens + web auth)
 - [x] Registration/Login avec validation
-- [ ] 2FA TOTP (Google Authenticator)
-- [ ] Session expiration et management
+- [x] 2FA TOTP (Google Authenticator)
+- [x] Session expiration et management
 - [x] Middleware d'authentification par rôle
 - **Responsable** : Dev 1 | **Durée** : 1.5j
 
 #### 1.4 Design System Tailwind
-- [ ] Palette couleurs : Violet (#3f047b), Fuchsia (#d304f4), neutres
-- [ ] Composants réutilisables : Button, Input, Card, Badge
-- [ ] Système de grille responsive (mobile-first)
-- [ ] Configurations Tailwind custom (animations, espacements)
-- [ ] Variables CSS pour thème clair/sombre
+- [x] Palette couleurs : Violet (#3f047b), Fuchsia (#d304f4), neutres
+- [x] Composants réutilisables : Button, Input, Card, Badge
+- [x] Système de grille responsive (mobile-first)
+- [x] Configurations Tailwind custom (animations, espacements)
+- [x] Variables CSS pour thème clair/sombre
 - **Responsable** : Dev 2 | **Durée** : 1.5j
 
 #### 1.5 Layouts & Navigation
-- [ ] Layout client avec header, footer, navigation mobile
-- [ ] Layout admin avec sidebar
-- [ ] Layout livreur (mobile-first)
-- [ ] Composants réutilisables : navbar, breadcrumb, pagination
-- [ ] Bottom navigation pour mobile (pattern app)
+- [x] Layout client avec header, footer, navigation mobile
+- [x] Layout admin avec sidebar
+- [x] Layout livreur (mobile-first)
+- [x] Composants réutilisables : navbar, breadcrumb, pagination
+- [x] Bottom navigation pour mobile (pattern app)
 - **Responsable** : Dev 2 | **Durée** : 1.5j
 
 ---
@@ -67,46 +67,46 @@
 ### **PHASE 2 : FRONTEND CORE (J5-J10 : 6 jours)**
 
 #### 2.1 Page d'Accueil
-- [ ] Hero banner avec carousel (produits tendance)
-- [ ] Sections catégories avec grille produits
-- [ ] Offres flash avec compte à rebours
-- [ ] Newsletter subscribe form
-- [ ] SEO optimisation (meta tags, schema.org)
+- [x] Hero banner avec carousel (produits tendance)
+- [x] Sections catégories avec grille produits
+- [x] Offres flash avec compte à rebours
+- [x] Newsletter subscribe form
+- [x] SEO optimisation (meta tags, schema.org)
 - **Responsable** : Dev 2 | **Durée** : 1j
 
 #### 2.2 Catalogue & Filtres
-- [ ] Grille produits avec lazy loading
-- [ ] Filtres avancés (prix, catégorie, note, disponibilité)
-- [ ] Barre de recherche live (autocomplete)
-- [ ] Tri (pertinence, prix, note, nouveau)
-- [ ] Vue Liste/Grille switchable
-- [ ] Pagination
+- [x] Grille produits avec lazy loading
+- [x] Filtres avancés (prix, catégorie, note, disponibilité)
+- [x] Barre de recherche live (autocomplete)
+- [x] Tri (pertinence, prix, note, nouveau)
+- [x] Vue Liste/Grille switchable
+- [x] Pagination
 - **Responsable** : Dev 2 | **Durée** : 1.5j
 
 #### 2.3 Fiche Produit
-- [ ] Galerie images zoomable (Lightbox)
-- [ ] Sélection variantes (taille, couleur, etc.)
-- [ ] Affichage prix en multi-devises
-- [ ] Avis clients avec étoiles
-- [ ] Section "Produits similaires"
-- [ ] Boutons "Ajouter au panier" et "Ajouter aux favoris"
+- [x] Galerie images zoomable (Lightbox)
+- [x] Sélection variantes (taille, couleur, etc.)
+- [x] Affichage prix en multi-devises
+- [x] Avis clients avec étoiles
+- [x] Section "Produits similaires"
+- [x] Boutons "Ajouter au panier" et "Ajouter aux favoris"
 - **Responsable** : Dev 2 | **Durée** : 1.5j
 
 #### 2.4 Panier d'Achat
-- [ ] Affichage articles panier
-- [ ] Ajout/suppression/mise à jour quantité
-- [ ] Calcul automatique total + frais de port (estimation)
-- [ ] Application codes promo (validation)
-- [ ] Persistence panier (localStorage + session)
-- [ ] Panier vide (state)
+- [x] Affichage articles panier
+- [x] Ajout/suppression/mise à jour quantité
+- [x] Calcul automatique total + frais de port (estimation)
+- [x] Application codes promo (validation)
+- [x] Persistence panier (localStorage + session)
+- [x] Panier vide (state)
 - **Responsable** : Dev 2 | **Durée** : 1j
 
 #### 2.5 Authentification Frontend
-- [ ] Page login avec email + password
-- [ ] Page register avec validation
-- [ ] Page forgot password
-- [ ] Modal 2FA TOTP après login
-- [ ] Persistent session avec "Se souvenir de moi"
+- [x] Page login avec email + password
+- [x] Page register avec validation
+- [x] Page forgot password
+- [x] Modal 2FA TOTP après login
+- [x] Persistent session avec "Se souvenir de moi"
 - **Responsable** : Dev 2 | **Durée** : 0.5j
 
 ---
@@ -117,38 +117,38 @@
 - [x] Étape 1 : Adresse de livraison (choix zone + frais calculés)
 - [x] Étape 2 : Méthode de paiement (sélection)
 - [x] Étape 3 : Récapitulatif + validation
-- [ ] Validation données à chaque étape
-- [ ] Gestion erreurs et rollback
+- [x] Validation données à chaque étape
+- [x] Gestion erreurs et rollback
 - **Responsable** : Dev 2 (UI) + Dev 1 (logique) | **Durée** : 1.5j
 
 #### 3.2 Système de Paiement - CinetPay
-- [ ] SDK CinetPay intégration
+- [x] SDK CinetPay intégration
 - [ ] Mobile Money (Orange Money, MTN, Wave, Moov)
-- [ ] Gestion webhooks retour paiement
-- [ ] Mise à jour status commande après paiement
-- [ ] Gestion erreurs paiement
+- [x] Gestion webhooks retour paiement
+- [x] Mise à jour status commande après paiement
+- [x] Gestion erreurs paiement
 - **Responsable** : Dev 1 | **Durée** : 1.5j
 
 #### 3.3 Système de Paiement - Stripe & PayPal
-- [ ] Stripe SDK setup
-- [ ] PayPal integration
+- [x] Stripe SDK setup
+- [x] PayPal integration
 - [ ] 3D Secure handling
-- [ ] Webhooks gestion
+- [x] Webhooks gestion
 - [ ] Tokenisation cards (jamais stocker les données)
 - **Responsable** : Dev 1 | **Durée** : 1.5j
 
 #### 3.4 Gestion Commandes Backend
-- [ ] CRUD commandes complet
-- [ ] Pipeline statuts : En attente → Confirmée → Préparation → En livraison → Livrée
-- [ ] Mise à jour status par admin
-- [ ] Génération facture PDF (DomPDF)
-- [ ] Historique modifications commande
+- [x] CRUD commandes complet
+- [x] Pipeline statuts : En attente → Confirmée → Préparation → En livraison → Livrée
+- [x] Mise à jour status par admin
+- [x] Génération facture PDF (DomPDF)
+- [x] Historique modifications commande
 - **Responsable** : Dev 1 | **Durée** : 1.5j
 
 #### 3.5 Espace Client Post-Achat
 - [ ] Tableau de bord (dernières commandes)
 - [x] Historique complet des commandes
-- [ ] Vue détail commande avec facture PDF
+- [x] Vue détail commande avec facture PDF
 - [ ] Section favoris/wishlist
 - [ ] Gestion profil & adresses de livraison
 - **Responsable** : Dev 2 | **Durée** : 1j
@@ -482,7 +482,7 @@ npm install lodash-es
 
 ## 📞 POINTS DE CONTACT
 
-- **Cahier des charges** : `/cahier_des_charges_DMOC.html`
+- **Cahier des charges** : `/cahier_des_charges_dmoc.html`
 - **Fonctionnalités par profil** : `/dmoc_fonctionnalites_par_profil.html`
 - **Stack** : Laravel 11, Blade/Livewire, Tailwind, MySQL 8, Redis
 

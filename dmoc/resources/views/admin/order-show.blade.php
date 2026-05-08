@@ -27,6 +27,11 @@
         <p><span class="text-[#c4b5d6]">Frais livraison:</span> {{ number_format((int)$order->delivery_fee_xof, 0, ',', ' ') }} XOF</p>
         <p><span class="text-[#c4b5d6]">Total:</span> {{ number_format((int)$order->total_xof, 0, ',', ' ') }} XOF</p>
     </div>
+    <div class="mt-4">
+        <a href="{{ route('admin.orders.invoice', $order->id) }}" class="rounded bg-[#d304f4] px-3 py-2 text-sm font-semibold">
+            Telecharger facture PDF
+        </a>
+    </div>
 </x-card>
 
 <x-card class="mb-6">
@@ -42,6 +47,19 @@
         <input type="text" name="note" placeholder="Note (optionnelle)" class="rounded border border-[#5a2080] bg-[#120024] px-3 py-2 text-white" />
         <button class="rounded bg-[#d304f4] px-4 py-2 font-semibold">Mettre a jour</button>
     </form>
+</x-card>
+
+<x-card class="mb-6">
+    <h2 class="text-xl font-semibold mb-3">Historique des statuts</h2>
+    @forelse($order->statusHistory as $entry)
+        <div class="mb-2 rounded border border-[#5a2080]/40 bg-[#120024] px-3 py-2 text-sm">
+            <span class="text-[#c4b5d6]">{{ $entry->created_at?->format('d/m/Y H:i') }}</span> -
+            {{ $entry->from_status ?? 'N/A' }} → <strong>{{ $entry->to_status }}</strong>
+            <span class="text-[#c4b5d6]">({{ $entry->source }})</span>
+        </div>
+    @empty
+        <p class="text-[#c4b5d6]">Aucun historique.</p>
+    @endforelse
 </x-card>
 
 <x-card class="mb-6">

@@ -1,10 +1,10 @@
-# 🏗️ ARCHITECTURE TECHNIQUE DMOC
+# 🏗️ ARCHITECTURE TECHNIQUE dmoc
 
 ## Vue d'ensemble System Design
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                        DMOC ARCHITECTURE                         │
+│                        dmoc ARCHITECTURE                         │
 └──────────────────────────────────────────────────────────────────┘
 
                            🌍 CLIENT

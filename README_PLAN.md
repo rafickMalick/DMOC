@@ -1,4 +1,4 @@
-# 📋 RÉSUMÉ DU PLAN - DMOC Development
+# 📋 RÉSUMÉ DU PLAN - dmoc Development
 
 ## Où vous en êtes
 ```

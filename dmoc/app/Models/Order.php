@@ -24,6 +24,20 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Order extends Model
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_PREPARING = 'preparing';
+    public const STATUS_SHIPPED = 'shipped';
+    public const STATUS_DELIVERED = 'delivered';
+
+    private const STATUS_TRANSITIONS = [
+        self::STATUS_PENDING => [self::STATUS_CONFIRMED],
+        self::STATUS_CONFIRMED => [self::STATUS_PREPARING],
+        self::STATUS_PREPARING => [self::STATUS_SHIPPED],
+        self::STATUS_SHIPPED => [self::STATUS_DELIVERED],
+        self::STATUS_DELIVERED => [],
+    ];
+
     protected function casts(): array
     {
         return [
@@ -59,5 +73,27 @@ class Order extends Model
     public function statusLogs(): HasMany
     {
         return $this->hasMany(OrderStatusLog::class)->latest();
+    }
+
+    public function statusHistory(): HasMany
+    {
+        return $this->hasMany(OrderStatusHistory::class)->latest();
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function allowedNextStatuses(string $status): array
+    {
+        return self::STATUS_TRANSITIONS[$status] ?? [];
+    }
+
+    public function canTransitionTo(string $nextStatus): bool
+    {
+        if ($this->status === $nextStatus) {
+            return true;
+        }
+
+        return in_array($nextStatus, self::STATUS_TRANSITIONS[$this->status] ?? [], true);
     }
 }

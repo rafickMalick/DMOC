@@ -7,6 +7,8 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Zone;
+use App\Services\OrderStatusService;
+use App\Services\Payments\PaymentProviderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,12 @@ use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
+    public function __construct(
+        private readonly PaymentProviderService $paymentProviderService,
+        private readonly OrderStatusService $orderStatusService
+    ) {
+    }
+
     public function stepOne(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -47,11 +55,17 @@ class CheckoutController extends Controller
         $estimatedDelivery = now()->addDays(2);
 
         $order = DB::transaction(function () use ($user, $cart, $validated, $zone, $subtotal, $deliveryFee, $total, $estimatedDelivery) {
+            foreach ($cart->items as $cartItem) {
+                if (! $cartItem->product || $cartItem->product->stock < $cartItem->quantity) {
+                    throw new \RuntimeException('Stock insuffisant pour un ou plusieurs produits.');
+                }
+            }
+
             $order = Order::query()->create([
                 'user_id' => $user->id,
                 'total_xof' => $total,
                 'delivery_fee_xof' => $deliveryFee,
-                'status' => 'pending',
+                'status' => Order::STATUS_PENDING,
                 'delivery_zone_id' => $zone->id,
                 'estimated_delivery' => $estimatedDelivery,
                 'shipping_address' => $validated['shipping_address'],
@@ -97,7 +111,7 @@ class CheckoutController extends Controller
         $order = Order::query()
             ->where('id', $orderId)
             ->where('user_id', $user->id)
-            ->where('status', 'pending')
+            ->where('status', Order::STATUS_PENDING)
             ->first();
 
         if (! $order) {
@@ -112,7 +126,7 @@ class CheckoutController extends Controller
                 'payment_method' => $validated['payment_method'],
             ]);
 
-            return Payment::query()->create([
+            $payment = Payment::query()->create([
                 'order_id' => $order->id,
                 'method' => $validated['payment_method'],
                 'amount_xof' => $order->total_xof,
@@ -123,6 +137,17 @@ class CheckoutController extends Controller
                     'message' => 'Paiement initialise',
                 ],
             ]);
+
+            $providerData = $this->paymentProviderService->initiate($payment);
+            if (($providerData['transaction_id'] ?? null) !== null) {
+                $payment->update([
+                    'transaction_id' => $providerData['transaction_id'],
+                    'status' => $providerData['status'] ?? 'processing',
+                    'response_data' => array_merge($payment->response_data ?? [], ['provider' => $providerData]),
+                ]);
+            }
+
+            return $payment;
         });
 
         return response()->json([
@@ -182,7 +207,7 @@ class CheckoutController extends Controller
             ], 404);
         }
 
-        if ($order->status !== 'pending') {
+        if ($order->status !== Order::STATUS_PENDING) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Cette commande est deja confirmee ou en cours.',
@@ -208,9 +233,13 @@ class CheckoutController extends Controller
                     ],
                 ]);
 
-                $order->update([
-                    'status' => 'confirmed',
-                ]);
+                $this->orderStatusService->transition(
+                    $order,
+                    Order::STATUS_CONFIRMED,
+                    $user->id,
+                    'checkout_api',
+                    'Commande confirmee en COD.'
+                );
 
                 $cart = Cart::query()->where('user_id', $user->id)->first();
                 if ($cart) {
@@ -246,6 +275,6 @@ class CheckoutController extends Controller
 
     private function generatePaymentReference(): string
     {
-        return 'DMOC-PAY-'.Str::upper(Str::random(12));
+        return 'dmoc-PAY-'.Str::upper(Str::random(12));
     }
 }

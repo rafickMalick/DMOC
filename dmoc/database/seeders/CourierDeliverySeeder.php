@@ -48,7 +48,7 @@ class CourierDeliverySeeder extends Seeder
         $courier = Courier::query()->firstOrCreate(
             ['user_id' => $livreur->id],
             [
-                'license_number' => 'LIC-DMOC-001',
+                'license_number' => 'LIC-dmoc-001',
                 'vehicle_type' => 'Moto',
                 'vehicle_plate' => 'BJ-TR-0001',
                 'status' => 'active',

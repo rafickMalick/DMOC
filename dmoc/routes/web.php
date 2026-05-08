@@ -5,6 +5,7 @@ use App\Http\Controllers\WebAuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderInvoiceController;
 
 Route::redirect('/', '/dmoc/home');
 Route::redirect('/login', '/dmoc/auth')->name('login');
@@ -12,18 +13,29 @@ Route::redirect('/login', '/dmoc/auth')->name('login');
 Route::prefix('dmoc')->group(function () {
     Route::get('/home',         [ClientController::class, 'home'])->name('client.home');
     Route::get('/catalog',      [ClientController::class, 'catalog'])->name('client.catalog');
-    Route::get('/product',      [ClientController::class, 'product'])->name('client.product');
+    Route::get('/shop',         [ClientController::class, 'catalog'])->name('client.shop');
+    Route::get('/support',      [ClientController::class, 'support'])->name('client.support');
+    Route::get('/product/{slug?}', [ClientController::class, 'product'])->name('client.product');
     Route::get('/tracking',     [ClientController::class, 'tracking'])->name('client.tracking');
     Route::get('/confirmation', [ClientController::class, 'confirmation'])->name('client.confirmation');
+    Route::get('/search/suggestions', [ClientController::class, 'searchSuggestions'])->name('client.search.suggestions');
     Route::get('/auth',         [WebAuthController::class, 'showAuthForm'])->name('client.auth');
+    Route::get('/forgot-password', [WebAuthController::class, 'showForgotPasswordForm'])->name('password.request');
+    Route::post('/forgot-password', [WebAuthController::class, 'sendResetLink'])->name('password.email');
 });
 
-Route::prefix('dmoc')->middleware(['auth', 'role:client,vendeur,admin,superadmin'])->group(function () {
+Route::prefix('dmoc')->middleware(['auth'])->group(function () {
     Route::get('/cart',         [ClientController::class, 'cart'])->name('client.cart');
+    Route::post('/cart/add',    [ClientController::class, 'addToCart'])->name('client.cart.add');
+    Route::put('/cart/items/{itemId}', [ClientController::class, 'updateCartItem'])->name('client.cart.items.update');
+    Route::delete('/cart/items/{itemId}', [ClientController::class, 'removeCartItem'])->name('client.cart.items.delete');
+    Route::post('/cart/promo', [ClientController::class, 'applyPromoCode'])->name('client.cart.promo.apply');
+    Route::delete('/cart/promo', [ClientController::class, 'removePromoCode'])->name('client.cart.promo.remove');
     Route::get('/checkout',     [ClientController::class, 'checkout'])->name('client.checkout');
     Route::get('/dashboard',    [ClientController::class, 'dashboard'])->name('client.dashboard');
     Route::get('/orders',       [ClientController::class, 'orders'])->name('client.orders');
     Route::get('/orders/{orderId}', [ClientController::class, 'orderShow'])->name('client.orders.show');
+    Route::get('/orders/{orderId}/invoice', [OrderInvoiceController::class, 'clientInvoice'])->name('client.orders.invoice');
     Route::post('/checkout/step-1', [ClientController::class, 'checkoutStepOne'])->name('client.checkout.step1');
     Route::post('/checkout/{orderId}/step-2', [ClientController::class, 'checkoutStepTwo'])->name('client.checkout.step2');
     Route::post('/checkout/{orderId}/confirm', [ClientController::class, 'checkoutConfirm'])->name('client.checkout.confirm');
@@ -34,6 +46,14 @@ Route::prefix('dmoc')->middleware(['auth', 'role:client,vendeur,admin,superadmin
 Route::post('/auth/register', [WebAuthController::class, 'register'])->name('auth.register');
 Route::post('/auth/login', [WebAuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/logout', [WebAuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
+Route::get('/auth/2fa-challenge', [WebAuthController::class, 'showTwoFactorChallenge'])->name('auth.2fa.challenge');
+Route::post('/auth/2fa-challenge', [WebAuthController::class, 'verifyTwoFactorChallenge'])->name('auth.2fa.verify');
+
+Route::prefix('dmoc')->middleware('auth')->group(function () {
+    Route::get('/profile/2fa', [WebAuthController::class, 'showTwoFactorSetup'])->name('auth.2fa.setup');
+    Route::post('/profile/2fa/enable', [WebAuthController::class, 'enableTwoFactor'])->name('auth.2fa.enable');
+    Route::post('/profile/2fa/disable', [WebAuthController::class, 'disableTwoFactor'])->name('auth.2fa.disable');
+});
 
 Route::prefix('dmoc')->middleware(['auth', 'role:livreur,admin,superadmin'])->group(function () {
     Route::get('/courier-list',   [CourierController::class, 'list'])->name('courier.list');
@@ -57,6 +77,7 @@ Route::prefix('dmoc')->middleware(['auth', 'role:admin,superadmin'])->group(func
     Route::delete('/admin-categories/{categoryId}', [AdminController::class, 'destroyCategory'])->name('admin.categories.destroy');
     Route::get('/admin-orders',   [AdminController::class, 'orders'])->name('admin.orders');
     Route::get('/admin-orders/{orderId}', [AdminController::class, 'orderShow'])->name('admin.orders.show');
+    Route::get('/admin-orders/{orderId}/invoice', [OrderInvoiceController::class, 'adminInvoice'])->name('admin.orders.invoice');
     Route::post('/admin-orders/{orderId}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.status');
     Route::post('/admin-orders/{orderId}/cancel', [AdminController::class, 'cancelOrder'])->name('admin.orders.cancel');
     Route::post('/admin-orders/{orderId}/assign-courier', [AdminController::class, 'assignCourier'])->name('admin.orders.assign-courier');

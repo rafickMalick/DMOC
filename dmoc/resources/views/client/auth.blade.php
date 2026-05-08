@@ -2,7 +2,7 @@
 @section('title','Auth')
 @section('content')
 <div class="mx-auto mb-6 max-w-2xl text-center">
-  <h1 class="text-4xl font-black tracking-tight mb-2">Bienvenue sur DMOC</h1>
+  <h1 class="text-4xl font-black tracking-tight mb-2">Bienvenue sur DMC</h1>
   <p class="text-[#c4b5d6]">Connecte-toi pour acceder a ton espace et suivre tes commandes.</p>
 </div>
 
@@ -39,6 +39,11 @@
       <input type="checkbox" name="remember" value="1" />
       Se souvenir de moi
     </label>
+    <div class="md:col-span-2 text-right">
+      <a href="{{ route('password.request') }}" class="text-sm text-[#d304f4] hover:text-white transition-colors">
+        Mot de passe oublie ?
+      </a>
+    </div>
     <button type="submit" class="w-full rounded-xl bg-[#d304f4] px-4 py-2 font-semibold hover:bg-[#b003cc] transition-colors md:col-span-2">Se connecter</button>
   </form>
 

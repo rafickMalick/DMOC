@@ -7,6 +7,9 @@
       @if($order)
           <p class='mt-2 text-[#c4b5d6]'>Order number <span class='text-[#d304f4] font-bold'>#{{ $order->id }}</span></p>
           <p class='mt-1 text-[#c4b5d6]'>Total: {{ number_format((int)$order->total_xof, 0, ',', ' ') }} XOF</p>
+          <a class="mt-3 inline-block text-sm text-[#d304f4] hover:text-white" href="{{ route('client.orders.invoice', $order->id) }}">
+              Telecharger la facture
+          </a>
       @else
           <p class='mt-2 text-[#c4b5d6]'>Your order has been successfully recorded.</p>
       @endif

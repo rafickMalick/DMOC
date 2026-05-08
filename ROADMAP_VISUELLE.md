@@ -1,10 +1,10 @@
-# 🗺️ ROADMAP VISUELLE - DMOC Development
+# 🗺️ ROADMAP VISUELLE - dmoc Development
 
 ## Vue d'ensemble 4 Semaines
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    DMOC DEVELOPMENT TIMELINE                        │
+│                    dmoc DEVELOPMENT TIMELINE                        │
 │                         4 Semaines = 40 Jours                       │
 └─────────────────────────────────────────────────────────────────────┘
 

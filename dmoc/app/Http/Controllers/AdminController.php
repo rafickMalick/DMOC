@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Zone;
+use App\Services\OrderStatusService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -24,6 +25,10 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+    public function __construct(private readonly OrderStatusService $orderStatusService)
+    {
+    }
+
     public function kpi()
     {
         $period = request()->query('period', '7d');
@@ -319,13 +324,18 @@ class AdminController extends Controller
     public function orderShow(int $orderId)
     {
         $order = Order::query()
-            ->with(['user', 'items.product', 'zone', 'payments', 'delivery.courier.user', 'statusLogs.actor'])
+            ->with([
+                'user',
+                'items.product',
+                'zone',
+                'payments',
+                'delivery.courier.user',
+                'statusHistory.actor',
+                'statusLogs.actor',
+            ])
             ->findOrFail($orderId);
 
-        $allowedStatuses = array_map(
-            static fn (OrderStatus $status) => $status->value,
-            OrderStatus::tryFrom($order->status)?->transitions() ?? []
-        );
+        $allowedStatuses = Order::allowedNextStatuses($order->status);
         $couriers = Courier::query()
             ->with('user')
             ->where('status', 'active')
@@ -341,10 +351,7 @@ class AdminController extends Controller
     public function updateOrderStatus(Request $request, int $orderId): RedirectResponse
     {
         $order = Order::query()->findOrFail($orderId);
-        $allowedTransitions = array_map(
-            static fn (OrderStatus $status) => $status->value,
-            OrderStatus::tryFrom($order->status)?->transitions() ?? []
-        );
+        $allowedTransitions = Order::allowedNextStatuses($order->status);
 
         if ($allowedTransitions === []) {
             return back()->with('error', 'Aucune transition de statut autorisee depuis cet etat.');
@@ -355,20 +362,17 @@ class AdminController extends Controller
             'note' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        DB::transaction(function () use ($order, $validated, $request): void {
-            $fromStatus = $order->status;
-            $order->update([
-                'status' => $validated['status'],
-            ]);
-
-            OrderStatusLog::query()->create([
-                'order_id' => $order->id,
-                'from_status' => $fromStatus,
-                'to_status' => $validated['status'],
-                'changed_by' => $request->user()?->id,
-                'note' => $validated['note'] ?? null,
-            ]);
-        });
+        try {
+            $this->orderStatusService->transition(
+                $order,
+                $validated['status'],
+                $request->user()?->id,
+                'admin_panel',
+                $validated['note'] ?? 'Mise a jour statut depuis back-office.'
+            );
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        }
 
         return redirect()
             ->route('admin.orders.show', $order->id)

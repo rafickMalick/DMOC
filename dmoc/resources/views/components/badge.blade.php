@@ -5,7 +5,7 @@
         'success' => 'bg-[#22c55e]/20 text-[#22c55e] border-[#22c55e]/40',
         'warning' => 'bg-[#f59e0b]/20 text-[#f59e0b] border-[#f59e0b]/40',
         'danger' => 'bg-[#ef4444]/20 text-[#ef4444] border-[#ef4444]/40',
-        default => 'bg-[#d304f4]/20 text-[#d304f4] border-[#d304f4]/40',
+        default => 'bg-[#f97316]/20 text-[#f97316] border-[#f97316]/40',
     };
 @endphp
 

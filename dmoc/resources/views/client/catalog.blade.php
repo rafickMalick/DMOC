@@ -1,140 +1,138 @@
 @extends('layouts.client')
-@section('title','Catalogue')
+@section('title', 'Catalogue')
 @section('content')
-<x-page-header title='Catalogue' breadcrumb='DMOC / Client / Catalogue'>
-    <p class='text-[#c4b5d6] text-lg mt-2'>124 produits trouvés avec nos filtres exclusifs.</p>
+<x-page-header title="Catalogue" breadcrumb="DMC / Client / Catalogue">
+    <p class="mt-2 text-lg text-[#c4b5d6]">{{ $products->total() }} produit(s) trouves.</p>
 </x-page-header>
 
-<div class='grid lg:grid-cols-[280px_1fr] gap-8'>
-  {{-- SECTION FILTRES --}}
-  <aside class='rounded-3xl border border-[#5a2080]/50 bg-[#120024] p-6 shadow-xl sticky top-28 h-fit backdrop-blur-md hidden lg:block'>
-      <h3 class="text-xl font-bold mb-6 text-white border-b border-[#5a2080]/50 pb-4">Filtres</h3>
-      
-      <div class="mb-6">
-          <h4 class="font-semibold text-[#c4b5d6] mb-3 uppercase text-sm tracking-wider">Catégories</h4>
-          <div class="space-y-3">
-              <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="checkbox" class="w-5 h-5 rounded border-[#5a2080] bg-[#1a0035] text-[#d304f4] focus:ring-[#d304f4] focus:ring-offset-[#120024]">
-                  <span class="text-white group-hover:text-[#d304f4] transition-colors">Electronique (42)</span>
-              </label>
-              <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="checkbox" class="w-5 h-5 rounded border-[#5a2080] bg-[#1a0035] text-[#d304f4] focus:ring-[#d304f4] focus:ring-offset-[#120024]">
-                  <span class="text-white group-hover:text-[#d304f4] transition-colors">Mode (56)</span>
-              </label>
-              <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="checkbox" class="w-5 h-5 rounded border-[#5a2080] bg-[#1a0035] text-[#d304f4] focus:ring-[#d304f4] focus:ring-offset-[#120024]" checked>
-                  <span class="text-[#d304f4]">Premium (12)</span>
-              </label>
-          </div>
-      </div>
-      
-      <div class="mb-6">
-          <h4 class="font-semibold text-[#c4b5d6] mb-3 uppercase text-sm tracking-wider">Prix</h4>
-          <input type="range" class="w-full h-2 bg-[#1a0035] rounded-lg appearance-none cursor-pointer accent-[#d304f4]">
-          <div class="flex justify-between mt-2 text-sm text-[#c4b5d6]">
-              <span>0 FCFA</span>
-              <span>150k FCFA</span>
-          </div>
-      </div>
-      
-      <x-btn-primary class="w-full">Appliquer les filtres</x-btn-primary>
-  </aside>
+<form method="GET" class="grid gap-8 lg:grid-cols-[280px_1fr]">
+    <aside class="h-fit rounded-3xl border border-[#5a2080]/50 bg-[#120024] p-6 shadow-xl lg:sticky lg:top-28">
+        <h3 class="mb-5 text-xl font-bold text-white">Filtres</h3>
 
-  <section>
-    {{-- SECTION HEADER --}}
-    <div class='mb-6 flex flex-col md:flex-row gap-4 justify-between bg-[#120024] p-4 rounded-2xl border border-[#5a2080]/30 shadow-lg'>
-        <div class="relative w-full md:w-96">
-            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#c4b5d6]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <input type="text" placeholder='Rechercher un produit...' class="w-full pl-10 pr-4 py-3 rounded-xl bg-[#1a0035] border border-[#5a2080]/50 text-white focus:border-[#d304f4] focus:ring-1 focus:ring-[#d304f4] outline-none transition-all placeholder-[#c4b5d6]/50">
-        </div>
-        <div class="flex gap-4">
-            <select class='rounded-xl bg-[#1a0035] border border-[#5a2080]/50 px-4 py-3 text-[#c4b5d6] focus:border-[#d304f4] outline-none appearance-none pr-10 relative'>
-                <option>Pertinence</option>
-                <option>Prix croissant</option>
-                <option>Prix décroissant</option>
-                <option>Nouveautés</option>
-            </select>
-            <div class='flex gap-1 bg-[#1a0035] p-1 rounded-xl border border-[#5a2080]/30'>
-                <button id='grid' class='rounded-lg bg-gradient-to-r from-[#d304f4] to-[#3f047b] text-white w-10 h-10 flex items-center justify-center shadow-lg transition-transform hover:scale-105'>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                </button>
-                <button id='list' class='rounded-lg text-[#c4b5d6] hover:bg-[#3f047b] w-10 h-10 flex items-center justify-center transition-colors'>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                </button>
+        <div class="mb-5">
+            <label class="mb-2 block text-xs uppercase tracking-wider text-[#c4b5d6]">Recherche</label>
+            <div class="relative">
+                <input id="search-input" type="text" name="search" value="{{ $search }}" placeholder="Nom ou mot-cle..."
+                       class="w-full rounded-xl border border-[#5a2080]/50 bg-[#1a0035] px-3 py-2 text-white outline-none focus:border-[#d304f4]">
+                <div id="search-suggestions" class="absolute z-20 mt-1 hidden w-full rounded-xl border border-[#5a2080]/50 bg-[#120024] p-2"></div>
             </div>
         </div>
-    </div>
 
-    {{-- SECTION GRILLE --}}
-    <div id='wrap' class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-      @for($i = 1; $i <= 6; $i++)
-      <x-card class="group flex flex-col p-0">
-          <div class="relative h-64 bg-gradient-to-br from-[#2a0550] to-[#1a0035] flex items-center justify-center overflow-hidden">
-              <div class="text-6xl group-hover:scale-110 transition-transform duration-500 z-10 w-32 h-32 bg-[#3f047b]/80 rounded-full flex items-center justify-center border border-[#d304f4]/30 shadow-[0_0_30px_rgba(211,4,244,0.3)]">🛍️</div>
-              <div class="absolute inset-0 bg-[#d304f4]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
-              @if($i == 1)
-              <span class="absolute top-4 left-4 bg-gradient-to-r from-[#d304f4] to-[#a855f7] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider z-20">PROMO</span>
-              @endif
-              
-              <div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20 bg-gradient-to-t from-[#120024] to-transparent pt-12 flex gap-2 justify-center">
-                  <button class="bg-white text-[#1a0035] w-12 h-12 rounded-full flex items-center justify-center hover:bg-[#d304f4] hover:text-white shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-colors" onclick="window.location.href='{{ route('client.product') }}'">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                  </button>
-                  <button class="bg-white text-[#1a0035] w-12 h-12 rounded-full flex items-center justify-center hover:bg-[#d304f4] hover:text-white shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                  </button>
-              </div>
-          </div>
-          <div class="p-5 flex-1 flex flex-col relative z-20 bg-[#1a0035]">
-              <h3 class="text-xl font-bold mb-2 group-hover:text-[#d304f4] transition-colors"><a href='{{ route('client.product') }}' class='block'>Produit Premium {{ $i }}</a></h3>
-              <p class="text-[#c4b5d6] text-sm mb-4 line-clamp-2">Le meilleur choix pour votre expérience e-commerce premium avec DMOC.</p>
-              
-              <div class="mt-auto">
-                  <div class="flex items-end gap-3 mb-4">
-                      @if($i == 1)
-                      <span class='line-through text-[#c4b5d6]/70 text-sm'>25 000 FCFA</span>
-                      @endif
-                      <span class='text-2xl text-[#d304f4] font-black'>19 000 FCFA</span>
-                  </div>
-                  <x-btn-primary class='w-full' onclick="window.location.href='{{ route('client.product') }}'">Plus de détails</x-btn-primary>
-              </div>
-          </div>
-      </x-card>
-      @endfor
-    </div>
-    
-    <div class='mt-12 flex justify-center gap-2'>
-        <button class='w-10 h-10 rounded-full border border-[#5a2080] text-[#c4b5d6] hover:bg-[#3f047b] hover:text-white transition-colors flex items-center justify-center'><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>
-        <button class='w-10 h-10 rounded-full bg-gradient-to-r from-[#d304f4] to-[#3f047b] text-white shadow-lg shadow-[#d304f4]/20 flex items-center justify-center font-bold'>1</button>
-        <button class='w-10 h-10 rounded-full border border-[#5a2080] text-[#c4b5d6] hover:bg-[#3f047b] hover:text-white transition-colors flex items-center justify-center font-bold'>2</button>
-        <button class='w-10 h-10 rounded-full border border-[#5a2080] text-[#c4b5d6] hover:bg-[#3f047b] hover:text-white transition-colors flex items-center justify-center font-bold'>3</button>
-        <span class="w-10 h-10 flex items-center justify-center text-[#c4b5d6]">...</span>
-        <button class='w-10 h-10 rounded-full border border-[#5a2080] text-[#c4b5d6] hover:bg-[#3f047b] hover:text-white transition-colors flex items-center justify-center font-bold'>8</button>
-        <button class='w-10 h-10 rounded-full border border-[#5a2080] text-[#c4b5d6] hover:bg-[#3f047b] hover:text-white transition-colors flex items-center justify-center'><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></button>
-    </div>
-  </section>
-</div>
+        <div class="mb-5">
+            <label class="mb-2 block text-xs uppercase tracking-wider text-[#c4b5d6]">Categories</label>
+            <div class="space-y-2">
+                @foreach($categories as $category)
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="category[]" value="{{ $category->id }}"
+                               @checked(in_array($category->id, $selectedCategories, true))
+                               class="rounded border-[#5a2080] bg-[#1a0035] text-[#d304f4]">
+                        <span class="text-sm">{{ $category->name }} ({{ $category->products_count }})</span>
+                    </label>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="mb-5 grid grid-cols-2 gap-2">
+            <div>
+                <label class="mb-1 block text-xs uppercase tracking-wider text-[#c4b5d6]">Prix min</label>
+                <input type="number" name="min_price" value="{{ request('min_price', 0) }}" min="0"
+                       class="w-full rounded-xl border border-[#5a2080]/50 bg-[#1a0035] px-3 py-2 text-white">
+            </div>
+            <div>
+                <label class="mb-1 block text-xs uppercase tracking-wider text-[#c4b5d6]">Prix max</label>
+                <input type="number" name="max_price" value="{{ request('max_price', $maxPrice) }}" min="0"
+                       class="w-full rounded-xl border border-[#5a2080]/50 bg-[#1a0035] px-3 py-2 text-white">
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <label class="mb-1 block text-xs uppercase tracking-wider text-[#c4b5d6]">Tri</label>
+            <select name="sort" class="w-full rounded-xl border border-[#5a2080]/50 bg-[#1a0035] px-3 py-2 text-white">
+                <option value="relevance" @selected($sort === 'relevance')>Pertinence</option>
+                <option value="newest" @selected($sort === 'newest')>Nouveautes</option>
+                <option value="price_asc" @selected($sort === 'price_asc')>Prix croissant</option>
+                <option value="price_desc" @selected($sort === 'price_desc')>Prix decroissant</option>
+                <option value="rating" @selected($sort === 'rating')>Mieux notes</option>
+            </select>
+        </div>
+
+        <div class="flex gap-2">
+            <button class="flex-1 rounded-xl bg-[#d304f4] px-4 py-2 font-semibold">Appliquer</button>
+            <a href="{{ route('client.catalog') }}" class="rounded-xl border border-[#5a2080] px-4 py-2 text-sm">Reset</a>
+        </div>
+    </aside>
+
+    <section>
+        <div class="mb-4 flex items-center justify-between">
+            <p class="text-sm text-[#c4b5d6]">Pagination server-side + chargement leger.</p>
+            <div class="flex items-center gap-2">
+                <button type="button" id="grid-view" class="rounded-lg bg-[#3f047b] p-2">▦</button>
+                <button type="button" id="list-view" class="rounded-lg border border-[#5a2080] p-2">☰</button>
+            </div>
+        </div>
+
+        <div id="products-wrap" class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            @forelse($products as $product)
+                <x-card class="group flex flex-col p-0">
+                    <div class="flex h-44 items-center justify-center rounded-t-2xl bg-[#2a0550] text-5xl">🛍️</div>
+                    <div class="flex flex-1 flex-col p-4">
+                        <x-badge>{{ $product->category?->name ?? 'Sans categorie' }}</x-badge>
+                        <h3 class="mt-2 text-lg font-bold">
+                            <a href="{{ route('client.product', ['slug' => $product->slug]) }}" class="hover:text-[#d304f4]">
+                                {{ $product->name }}
+                            </a>
+                        </h3>
+                        <p class="mt-1 line-clamp-2 text-sm text-[#c4b5d6]">{{ $product->description }}</p>
+                        <div class="mt-auto flex items-center justify-between pt-4">
+                            <span class="text-xl font-black text-[#d304f4]">{{ number_format($product->price_xof, 0, ',', ' ') }} XOF</span>
+                            <form method="POST" action="{{ route('client.cart.add') }}">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <button class="rounded-xl bg-[#d304f4] px-3 py-2 text-sm font-semibold">Ajouter</button>
+                            </form>
+                        </div>
+                    </div>
+                </x-card>
+            @empty
+                <x-card>
+                    <p class="text-[#c4b5d6]">Aucun produit ne correspond aux filtres actuels.</p>
+                </x-card>
+            @endforelse
+        </div>
+
+        <div class="mt-8">{{ $products->links() }}</div>
+    </section>
+</form>
+
 <script>
-const w=document.getElementById('wrap');
-const btnGrid = document.getElementById('grid');
-const btnList = document.getElementById('list');
+    const wrap = document.getElementById('products-wrap');
+    document.getElementById('grid-view')?.addEventListener('click', () => {
+        wrap.className = 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3';
+    });
+    document.getElementById('list-view')?.addEventListener('click', () => {
+        wrap.className = 'grid grid-cols-1 gap-6';
+    });
 
-if(btnGrid && btnList) {
-    btnGrid.addEventListener('click',()=>{
-        w.className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
-        btnGrid.classList.replace('bg-transparent', 'bg-gradient-to-r');
-        btnGrid.classList.replace('text-[#c4b5d6]', 'text-white');
-        btnList.classList.replace('bg-gradient-to-r', 'bg-transparent');
-        btnList.classList.replace('text-white', 'text-[#c4b5d6]');
+    const input = document.getElementById('search-input');
+    const suggestions = document.getElementById('search-suggestions');
+    let timer = null;
+
+    input?.addEventListener('input', () => {
+        clearTimeout(timer);
+        const value = input.value.trim();
+        if (value.length < 2) {
+            suggestions.classList.add('hidden');
+            return;
+        }
+
+        timer = setTimeout(async () => {
+            const response = await fetch(`{{ route('client.search.suggestions') }}?q=${encodeURIComponent(value)}`);
+            const data = await response.json();
+            suggestions.innerHTML = (data.data || []).map((item) =>
+                `<a class="block rounded-lg px-2 py-2 text-sm hover:bg-[#1a0035]" href="/dmoc/product/${item.slug}">${item.name}</a>`
+            ).join('');
+            suggestions.classList.remove('hidden');
+        }, 250);
     });
-    btnList.addEventListener('click',()=>{
-        w.className='grid grid-cols-1 gap-6';
-        btnList.classList.add('bg-gradient-to-r', 'from-[#d304f4]', 'to-[#3f047b]', 'text-white');
-        btnList.classList.remove('bg-transparent', 'text-[#c4b5d6]');
-        btnGrid.classList.remove('bg-gradient-to-r', 'from-[#d304f4]', 'to-[#3f047b]', 'text-white');
-        btnGrid.classList.add('bg-transparent', 'text-[#c4b5d6]');
-    });
-}
 </script>
 @endsection

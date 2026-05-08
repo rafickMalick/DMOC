@@ -4,17 +4,26 @@ namespace App\Support;
 
 use App\Enums\DeliveryStatus;
 use App\Enums\OrderStatus;
+use App\Models\Order;
 
 class StatusHelper
 {
     public static function orderLabel(string $status): string
     {
-        return OrderStatus::tryFrom($status)?->label() ?? $status;
+        return match ($status) {
+            'preparing' => 'En preparation',
+            'shipped' => 'Expediee',
+            default => OrderStatus::tryFrom($status)?->label() ?? $status,
+        };
     }
 
     public static function orderBadgeClasses(string $status): string
     {
-        $color = OrderStatus::tryFrom($status)?->badgeColor() ?? 'slate';
+        $color = match ($status) {
+            'preparing' => 'blue',
+            'shipped' => 'yellow',
+            default => OrderStatus::tryFrom($status)?->badgeColor() ?? 'slate',
+        };
 
         return self::badgeClasses($color);
     }
@@ -33,6 +42,11 @@ class StatusHelper
 
     public static function allowedOrderTransitions(string $status): array
     {
+        $pipeline = Order::allowedNextStatuses($status);
+        if ($pipeline !== []) {
+            return $pipeline;
+        }
+
         return array_map(
             static fn (OrderStatus $next) => $next->value,
             OrderStatus::tryFrom($status)?->transitions() ?? []

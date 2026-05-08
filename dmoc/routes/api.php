@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\PaymentWebhookController;
+
+Route::post('/webhooks/cinetpay', [PaymentWebhookController::class, 'cinetpay']);
+Route::post('/webhooks/stripe', [PaymentWebhookController::class, 'stripe']);
+Route::post('/webhooks/paypal', [PaymentWebhookController::class, 'paypal']);
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
